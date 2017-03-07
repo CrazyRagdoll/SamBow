@@ -1,5 +1,7 @@
 #include "Sprite.h"
+#include "Vertex.h"
 
+#include <cstddef>
 
 Sprite::Sprite()
 {
@@ -23,27 +25,44 @@ void Sprite::init(float x, float y, float width, float height) {
 		glGenBuffers(1, &_vboID);
 	}
 
-	float vertexData[12];
+	Vertex vertexData[6];
 
 	//First tiangle
-	vertexData[0] = x + width;
-	vertexData[1] = y + height;
+	vertexData[0].position.x = x + width;
+	vertexData[0].position.y = y + height;
 
-	vertexData[2] = x;
-	vertexData[3] = y + height;
+	vertexData[1].position.x = x;
+	vertexData[1].position.y = y + height;
 
-	vertexData[4] = x;
-	vertexData[5] = y;
+	vertexData[2].position.x = x;
+	vertexData[2].position.y = y;
 
 	//Second triangle
-	vertexData[6] = x;
-	vertexData[7] = y;
+	vertexData[3].position.x = x;
+	vertexData[3].position.y = y;
 
-	vertexData[8] = x + width;
-	vertexData[9] = y;
+	vertexData[4].position.x = x + width;
+	vertexData[4].position.y = y;
 
-	vertexData[10]= x + width;
-	vertexData[11]= y + height;
+	vertexData[5].position.x = x + width;
+	vertexData[5].position.y = y + height;
+
+	for (int i = 0; i < 6; i++) {
+		vertexData[i].colour.r = 255;
+		vertexData[i].colour.g = 0;
+		vertexData[i].colour.b = 255;
+		vertexData[i].colour.a = 255;
+	}
+
+	vertexData[1].colour.r = 0;
+	vertexData[1].colour.g = 0;
+	vertexData[1].colour.b = 255;
+	vertexData[1].colour.a = 255;
+
+	vertexData[4].colour.r = 0;
+	vertexData[4].colour.g = 255;
+	vertexData[4].colour.b = 0;
+	vertexData[4].colour.a = 255;
 
 	//Bind the buffer to ARRAY_BUFFER with our ID
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
@@ -62,9 +81,13 @@ void Sprite::draw() {
 	//Enable attrib array
 	glEnableVertexAttribArray(0);
 
-	//Pointing the buffer to the data and how to draw it
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	//This is the position attribute pointer
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
 
+	//This is the colour attribute pointer
+	glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, colour));
+
+	//Draw the 6 verticies to the screen
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	//Disable attrid array

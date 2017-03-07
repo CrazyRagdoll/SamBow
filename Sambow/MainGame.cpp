@@ -24,7 +24,7 @@ void MainGame::run() {
 	initSystems();
 
 	//hard code the sprite into the game (Bad)
-	_sprite.init(-1.0f, -1.0f, 1.0f, 1.0f);
+	_sprite.init(-1.0f, -1.0f, 2.0f, 2.0f);
 
 	//Run the game loop
 	gameLoop();
@@ -64,7 +64,8 @@ void MainGame::initSystems() {
 
 void MainGame::initShaders() {
 	_colourProgram.compileShaders("Shaders/colourShading.vert", "Shaders/colourShading.frag");
-	_colourProgram.addAttribute("vertexPositioN");
+	_colourProgram.addAttribute("vertexPosition");
+	_colourProgram.addAttribute("vertexColour");
 	_colourProgram.linkShaders();
 }
 
