@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 
+#include "GLSLProgram.h"
 #include "Sprite.h"
 
 enum class GameState{PLAY, EXIT};
@@ -19,6 +20,7 @@ public:
 
 private:
 	void initSystems();		//Inialise everything needed to run the game
+	void initShaders();
 	void gameLoop();		//The main game loop which will do all of the magic.
 	void processInput();	//Processing input from the user
 	void drawGame();		//Draw content to the game
@@ -29,6 +31,8 @@ private:
 	GameState _gameState;
 
 	Sprite _sprite;
+
+	GLSLProgram _colourProgram;
 
 };
 

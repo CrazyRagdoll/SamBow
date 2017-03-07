@@ -1,15 +1,8 @@
 #include "MainGame.h"
+#include "Errors.h"
 
 #include <iostream>
 #include <string>
-
-void fatalError(std::string errorString) {
-	std::cout << errorString << std::endl;
-	std::cout << "Enter any key to quit...";
-	int tmp;
-	std::cin >> tmp;
-	SDL_Quit();
-}
 
 MainGame::MainGame()
 {
@@ -65,6 +58,14 @@ void MainGame::initSystems() {
 
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
+	initShaders();
+
+}
+
+void MainGame::initShaders() {
+	_colourProgram.compileShaders("Shaders/colourShading.vert", "Shaders/colourShading.frag");
+	_colourProgram.addAttribute("vertexPositioN");
+	_colourProgram.linkShaders();
 }
 
 
@@ -99,8 +100,12 @@ void MainGame::drawGame() {		//Draw content to the game
 	//Clear the colour and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	_colourProgram.use();
+
 	//draw the sprite
 	_sprite.draw();
+
+	_colourProgram.unuse();
 
 	//Swap our buffer and draw everything to the screen
 	SDL_GL_SwapWindow(_window);
