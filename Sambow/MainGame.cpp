@@ -27,10 +27,13 @@ MainGame::~MainGame()
 
 //Run the game
 void MainGame::run() {
+	//initalise the systems
 	initSystems();
 
+	//hard code the sprite into the game (Bad)
 	_sprite.init(-1.0f, -1.0f, 1.0f, 1.0f);
 
+	//Run the game loop
 	gameLoop();
 }
 
@@ -96,6 +99,7 @@ void MainGame::drawGame() {		//Draw content to the game
 	//Clear the colour and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//draw the sprite
 	_sprite.draw();
 
 	//Swap our buffer and draw everything to the screen

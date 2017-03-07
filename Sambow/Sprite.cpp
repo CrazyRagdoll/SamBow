@@ -14,7 +14,7 @@ Sprite::~Sprite()
 	}
 }
 
-
+//Spirte initalise function
 void Sprite::init(float x, float y, float width, float height) {
 	_x = x; _y = y; _width = width; _height = height;
 
@@ -54,6 +54,7 @@ void Sprite::init(float x, float y, float width, float height) {
 
 }
 
+//sprite draw function
 void Sprite::draw() {
 	//Binding the buffer again - You can only have one bound at at time
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);

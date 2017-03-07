@@ -8,8 +8,10 @@ public:
 	Sprite();
 	~Sprite();
 
+	//Spirte initalise function
 	void init(float x, float y, float width, float height);
 
+	//sprite draw function
 	void draw();
 
 private:
