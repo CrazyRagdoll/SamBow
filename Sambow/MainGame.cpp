@@ -56,15 +56,19 @@ void MainGame::initSystems() {
 		fatalError("Could not initialize glew!");
 	}
 
+	//Set OpenGL to use double buffering
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
+	//Clear the background
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
+	//initalise the shaders
 	initShaders();
 
 }
 
 void MainGame::initShaders() {
+	//Using colour program to compile, init, and link our fragment + vertex shaders
 	_colourProgram.compileShaders("Shaders/colourShading.vert", "Shaders/colourShading.frag");
 	_colourProgram.addAttribute("vertexPosition");
 	_colourProgram.addAttribute("vertexColour");
@@ -76,7 +80,7 @@ void MainGame::initShaders() {
 void MainGame::gameLoop(){
 	while (_gameState != GameState::EXIT) {
 		processInput();
-		_time += 0.01;
+		_time += 0.05;
 		drawGame();
 	}
 }
