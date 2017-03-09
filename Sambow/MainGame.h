@@ -34,5 +34,7 @@ private:
 
 	GLSLProgram _colourProgram;
 
+	float _time;
+
 };
 

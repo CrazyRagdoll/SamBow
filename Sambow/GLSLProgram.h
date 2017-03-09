@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 
 //OPENGL SHADING LANGUAGE
+//This class handles the compilation, linking, and usage of a GLSL shader program
 class GLSLProgram
 {
 public:
@@ -17,6 +18,8 @@ public:
 	void linkShaders();
 
 	void addAttribute(const std::string& attributeName);
+
+	GLuint getUniformLocation(const std::string& uniformName);
 
 	void use();
 	void unuse();

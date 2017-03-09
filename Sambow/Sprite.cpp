@@ -59,8 +59,8 @@ void Sprite::init(float x, float y, float width, float height) {
 	vertexData[1].colour.b = 255;
 	vertexData[1].colour.a = 255;
 
-	vertexData[4].colour.r = 0;
-	vertexData[4].colour.g = 255;
+	vertexData[4].colour.r = 255;
+	vertexData[4].colour.g = 0;
 	vertexData[4].colour.b = 0;
 	vertexData[4].colour.a = 255;
 
