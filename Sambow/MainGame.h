@@ -28,6 +28,7 @@ private:
 	void gameLoop();		//The main game loop which will do all of the magic.
 	void processInput();	//Processing input from the user
 	void drawGame();		//Draw content to the game
+	void calculateFPS();
 
 	SDL_Window* _window;
 	int _screenWidth;
@@ -37,6 +38,11 @@ private:
 	std::vector <Sprite*> _sprites;
 
 	GLSLProgram _colourProgram;
+
+	float _fps;
+	float _maxFPS;
+	float _frameTime;
+
 
 	float _time;
 
