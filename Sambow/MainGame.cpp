@@ -1,6 +1,5 @@
 #include "MainGame.h"
 #include "Errors.h"
-#include "ImageLoader.h"
 
 #include <iostream>
 #include <string>
@@ -27,9 +26,12 @@ void MainGame::run() {
 	initSystems();
 
 	//hard code the sprite into the game (Bad)
-	_sprite.init(-1.0f, -1.0f, 2.0f, 2.0f);
+	_sprites.push_back(new Sprite());
+	_sprites.back()->init(-1.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 
-	_playerTexture = ImageLoader::loadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	_sprites.push_back(new Sprite());
+	_sprites.back()->init(0.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+
 
 	//Run the game loop
 	gameLoop();
@@ -101,7 +103,7 @@ void MainGame::processInput() {
 			_gameState = GameState::EXIT;
 			break;
 		case SDL_MOUSEMOTION:
-			std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+			//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 			break;
 		}
 	}
@@ -113,19 +115,31 @@ void MainGame::drawGame() {		//Draw content to the game
 	//Clear the colour and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//enable the shaders
 	_colourProgram.use();
+
+	//Using texture unit 0
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _playerTexture.id);
+	//Get the uniform location
 	GLint textureLocation = _colourProgram.getUniformLocation("mySampler");
+	
+	//tell the sader that the texture is in texture unit 0
 	glUniform1i(textureLocation, 0);
 
+	//Set the constnatly changing time varaible
 	GLint timeLocation = _colourProgram.getUniformLocation("time");
 	glUniform1f(timeLocation, _time);
 
 	//draw the sprite
-	_sprite.draw();
+	for (int i = 0; i < _sprites.size(); i++)
+	{
+		_sprites[i]->draw();
+	}
 
+	//unbind the texture
 	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	//disable the shader
 	_colourProgram.unuse();
 
 	//Swap our buffer and draw everything to the screen
