@@ -97,6 +97,7 @@ void GLSLProgram::use() {
 	}
 }
 
+//Unsue the shaders
 void GLSLProgram::unuse() {
 	glUseProgram(0);
 	for (int i = 0; i < _numAttributes; i++) {
