@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+//Game Constructor, Currently initalizing private member variables
 MainGame::MainGame() : 
 		_window(nullptr), 
 		_screenWidth(1024), 
@@ -15,7 +16,7 @@ MainGame::MainGame() :
 
 }
 
-
+//Destructor
 MainGame::~MainGame()
 {
 }
@@ -177,25 +178,32 @@ void MainGame::drawGame() {		//Draw content to the game
 	SDL_GL_SwapWindow(_window);
 }
 
+//A function to calculate the FPS
 void MainGame::calculateFPS() {
+	//Average the last 10 frames for a more stable value
 	static const int NUM_SAMPLES = 10;
+	//Make an array of floats to hold the frame values
 	static float frameTimes[NUM_SAMPLES];
+	//Current frame
 	static int currentFrame = 0;
-
+	
+	//Using SDL_GetTicks to calcualte the difference in ticks between frames.
+	//The tics from the first frame
 	static float prevTicks = SDL_GetTicks();
 
+	//The tics form the current frame
 	float currentTicks;
-
 	currentTicks = SDL_GetTicks();
 
+	//The difference between the two frames in tics
 	_frameTime = currentTicks - prevTicks;
 	frameTimes[currentFrame % NUM_SAMPLES] = _frameTime;
 
 	prevTicks = currentTicks;
 
+	//Setting a count to calculate average FPS
 	int count;
 	currentFrame++;
-
 	if (currentFrame < NUM_SAMPLES) {
 		count = currentFrame;
 	}
@@ -203,6 +211,7 @@ void MainGame::calculateFPS() {
 		count = NUM_SAMPLES;
 	}
 
+	//Calculating the average Fps
 	float frameTimeAverage = 0;
 	for (int i = 0; i < count; i++) {
 		frameTimeAverage += frameTimes[i];
