@@ -2,9 +2,13 @@
 
 #include <GL\glew.h>
 
-struct GLTexture {
-	GLuint id;
-	int width;
-	int height;
-	
-};
+namespace Bowengine {
+
+	struct GLTexture {
+		GLuint id;
+		int width;
+		int height;
+
+	};
+
+}

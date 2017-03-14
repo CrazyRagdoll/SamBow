@@ -5,26 +5,29 @@
 
 #include <string>
 
-//A 2D quad that can be rendered to screen
-class Sprite
-{
-public:
-	Sprite();
-	~Sprite();
+namespace Bowengine {
 
-	//Spirte initalise function
-	void init(float x, float y, float width, float height, std::string texturePath);
+	//A 2D quad that can be rendered to screen
+	class Sprite
+	{
+	public:
+		Sprite();
+		~Sprite();
 
-	//sprite draw function
-	void draw();
+		//Spirte initalise function
+		void init(float x, float y, float width, float height, std::string texturePath);
 
-private:
-	//Dimentions and position of sprite
-	float _x, _y, _width, _height;
-	//GL int garanteed to be 32bits.
-	GLuint _vboID;
+		//sprite draw function
+		void draw();
 
-	GLTexture _texture;
+	private:
+		//Dimentions and position of sprite
+		float _x, _y, _width, _height;
+		//GL int garanteed to be 32bits.
+		GLuint _vboID;
 
-};
+		GLTexture _texture;
 
+	};
+
+}

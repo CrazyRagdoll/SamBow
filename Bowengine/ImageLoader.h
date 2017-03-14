@@ -4,11 +4,14 @@
 
 #include <string>
 
-class ImageLoader
-{
-public:
+namespace Bowengine {
 
-	static GLTexture loadPNG(std::string filePath);
+	class ImageLoader
+	{
+	public:
 
-};
+		static GLTexture loadPNG(std::string filePath);
 
+	};
+
+}

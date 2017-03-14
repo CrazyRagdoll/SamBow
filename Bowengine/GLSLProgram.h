@@ -3,36 +3,39 @@
 #include <string>
 #include <GL/glew.h>
 
-//OPENGL SHADING LANGUAGE
-//This class handles the compilation, linking, and usage of a GLSL shader program
-class GLSLProgram
-{
-public:
-	GLSLProgram();
-	~GLSLProgram();
+namespace Bowengine {
 
-	//Read our vertex and fragment shaders and compile them
-	void compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
+	//OPENGL SHADING LANGUAGE
+	//This class handles the compilation, linking, and usage of a GLSL shader program
+	class GLSLProgram
+	{
+	public:
+		GLSLProgram();
+		~GLSLProgram();
 
-	//Link the shaders to the program
-	void linkShaders();
+		//Read our vertex and fragment shaders and compile them
+		void compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
 
-	void addAttribute(const std::string& attributeName);
+		//Link the shaders to the program
+		void linkShaders();
 
-	GLint getUniformLocation(const std::string& uniformName);
+		void addAttribute(const std::string& attributeName);
 
-	void use();
-	void unuse();
+		GLint getUniformLocation(const std::string& uniformName);
 
-private:
+		void use();
+		void unuse();
 
-	int _numAttributes;
+	private:
 
-	void compileShader(const std::string& filePath, GLuint id);
+		int _numAttributes;
 
-	GLuint _programID;
+		void compileShader(const std::string& filePath, GLuint id);
 
-	GLuint _vertexShaderID;
-	GLuint _fragmentShaderID;
-};
+		GLuint _programID;
 
+		GLuint _vertexShaderID;
+		GLuint _fragmentShaderID;
+	};
+
+}

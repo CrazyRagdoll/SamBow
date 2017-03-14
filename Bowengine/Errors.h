@@ -2,4 +2,8 @@
 
 #include <string>
 
-extern void fatalError(std::string errorString);
+namespace Bowengine {
+
+	extern void fatalError(std::string errorString);
+
+}

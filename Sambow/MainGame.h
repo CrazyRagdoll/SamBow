@@ -4,10 +4,11 @@
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 
-#include "GLSLProgram.h"
-#include "GLTexture.h"
-
-#include "Sprite.h"
+#include <Bowengine/Bowengine.h>
+#include <Bowengine/GLSLProgram.h>
+#include <Bowengine/GLTexture.h>
+#include <Bowengine/Sprite.h>
+#include <Bowengine/Window.h>
 
 #include <vector>
 
@@ -30,14 +31,15 @@ private:
 	void drawGame();		//Draw content to the game
 	void calculateFPS();	//Calculate the fps of the game
 
-	SDL_Window* _window;	//The instance of the SDL_Window
+	Bowengine::Window _window;	//The instance of the SDL_Window
+
 	int _screenWidth;		//Screen's width
 	int _screenHeight;		//Screen's height
 	GameState _gameState;	//Current state of the game (enum class)
 
-	std::vector <Sprite*> _sprites;
+	std::vector <Bowengine::Sprite*> _sprites;
 
-	GLSLProgram _colourProgram;
+	Bowengine::GLSLProgram _colourProgram;
 
 	//FPS calculating variables
 	float _fps, _maxFPS, _frameTime;
