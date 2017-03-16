@@ -10,9 +10,12 @@ out vec2 fragmentPosition;
 out vec4 fragmentColour;
 out vec2 fragmentUV;
 
+//Orthographic matrix
+uniform mat4 P;
+
 void main() {
 	//Set the x,y position on the screen
-	gl_Position.xy = vertexPosition;
+	gl_Position.xy = (P * vec4(vertexPosition, 0.0, 1.0)).xy;
 	//the z position is zero at the moment since we are in 2D
 	gl_Position.z = 0.0;
 	

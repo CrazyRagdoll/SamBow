@@ -10,6 +10,8 @@
 #include <Bowengine/Sprite.h>
 #include <Bowengine/Window.h>
 
+#include <Bowengine/Camera2D.h>
+
 #include <vector>
 
 enum class GameState{PLAY, EXIT};
@@ -40,6 +42,8 @@ private:
 	std::vector <Bowengine::Sprite*> _sprites;
 
 	Bowengine::GLSLProgram _colourProgram;
+
+	Bowengine::Camera2D _camera2D;
 
 	//FPS calculating variables
 	float _fps, _maxFPS, _frameTime;

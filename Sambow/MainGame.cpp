@@ -12,7 +12,7 @@ MainGame::MainGame() :
 		_gameState(GameState::PLAY), 
 		_maxFPS(60.0f)
 {
-
+	_camera2D.init(_screenWidth, _screenHeight);
 }
 
 //Destructor
@@ -28,12 +28,10 @@ void MainGame::run() {
 
 	//hard code the sprite into the game (Bad)
 	_sprites.push_back(new Bowengine::Sprite());
-	_sprites.back()->init(-1.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	_sprites.back()->init(0.0f, 0.0f, _screenWidth/2, _screenHeight/2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 
-	for (int i = 0; i < 1000; i++) {
-		_sprites.push_back(new Bowengine::Sprite());
-		_sprites.back()->init(0.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
-	}
+	_sprites.push_back(new Bowengine::Sprite());
+	_sprites.back()->init(_screenWidth / 2, 0.0f, _screenWidth/2, _screenHeight/2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 
 	//Run the game loop
 	gameLoop();
@@ -72,6 +70,9 @@ void MainGame::gameLoop(){
 
 		processInput();
 		_time += 0.01;
+
+		_camera2D.update();
+
 		drawGame();
 		calculateFPS();
 
@@ -100,6 +101,9 @@ void MainGame::processInput() {
 
 	SDL_Event evnt;
 
+	const float CAMERA_SPEED = 20.0f;
+	const float SCALE_SPEED = 0.1f;
+
 	while (SDL_PollEvent(&evnt)) {	//While there is an event (returning 1/true)
 		switch (evnt.type) {		//Which type of event was it.
 		case SDL_QUIT:
@@ -108,6 +112,27 @@ void MainGame::processInput() {
 		case SDL_MOUSEMOTION:
 			//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 			break;
+		case SDL_KEYDOWN:
+			switch (evnt.key.keysym.sym) {
+			case SDLK_w:
+				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
+				break;
+			case SDLK_s:
+				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
+				break;
+			case SDLK_a:
+				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
+				break;
+			case SDLK_d:
+				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
+				break;
+			case SDLK_q:
+				_camera2D.setScale(_camera2D.getScale() + SCALE_SPEED);
+				break;
+			case SDLK_e:
+				_camera2D.setScale(_camera2D.getScale() - SCALE_SPEED);
+				break;
+			}
 		}
 	}
 }
@@ -132,6 +157,11 @@ void MainGame::drawGame() {		//Draw content to the game
 	//Set the constnatly changing time varaible
 	GLint timeLocation = _colourProgram.getUniformLocation("time");
 	glUniform1f(timeLocation, _time);
+
+	//Set the camera matrix
+	GLint pLocation = _colourProgram.getUniformLocation("P");
+	glm::mat4 cameraMatrix = _camera2D.getCameraMatrix();
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 
 	//draw the sprite
 	for (int i = 0; i < _sprites.size(); i++)
