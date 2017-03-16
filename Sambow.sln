@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sambow", "Sambow\Sambow.vcxproj", "{F579A9F4-BD9D-428C-B0EC-291BF3B320D0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FEA1C4EA-DCA4-4356-BC96-D118A7F79DF5} = {FEA1C4EA-DCA4-4356-BC96-D118A7F79DF5}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bowengine", "Bowengine\Bowengine.vcxproj", "{FEA1C4EA-DCA4-4356-BC96-D118A7F79DF5}"
 EndProject

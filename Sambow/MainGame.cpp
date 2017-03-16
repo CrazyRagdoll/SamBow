@@ -26,13 +26,6 @@ void MainGame::run() {
 	//initalise the systems
 	initSystems();
 
-	//hard code the sprite into the game (Bad)
-	_sprites.push_back(new Bowengine::Sprite());
-	_sprites.back()->init(0.0f, 0.0f, _screenWidth/2, _screenHeight/2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
-
-	_sprites.push_back(new Bowengine::Sprite());
-	_sprites.back()->init(_screenWidth / 2, 0.0f, _screenWidth/2, _screenHeight/2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
-
 	//Run the game loop
 	gameLoop();
 }
@@ -47,6 +40,9 @@ void MainGame::initSystems() {
 
 	//initalise the shaders
 	initShaders();
+	
+	//initalise the sprite batch
+	_spriteBatch.init();
 
 }
 
@@ -121,10 +117,10 @@ void MainGame::processInput() {
 				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
 				break;
 			case SDLK_a:
-				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
+				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
 				break;
 			case SDLK_d:
-				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
+				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
 				break;
 			case SDLK_q:
 				_camera2D.setScale(_camera2D.getScale() + SCALE_SPEED);
@@ -163,11 +159,22 @@ void MainGame::drawGame() {		//Draw content to the game
 	glm::mat4 cameraMatrix = _camera2D.getCameraMatrix();
 	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 
-	//draw the sprite
-	for (int i = 0; i < _sprites.size(); i++)
-	{
-		_sprites[i]->draw();
-	}
+	//Calling the spritebatch
+	_spriteBatch.begin();
+
+	glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
+	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
+	static Bowengine::GLTexture texture = Bowengine::ResourceManager::getTexture("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	Bowengine::Colour colour;
+	colour.r = 255; colour.g = 255; colour.b = 255; colour.a = 255;
+
+	_spriteBatch.draw(pos, uv, texture.id, 0.0f, colour);
+
+	_spriteBatch.draw(pos + glm::vec4(50.0f, 0.0f, 0.0f, 0.0f), uv, texture.id, 0.0f, colour);
+
+	_spriteBatch.end();
+
+	_spriteBatch.renderBatch();
 
 	//unbind the texture
 	glBindTexture(GL_TEXTURE_2D, 0);

@@ -16,7 +16,7 @@ namespace Bowengine {
 		GLubyte g;
 		GLubyte b;
 		GLubyte a;
-	} colour;
+	};
 
 	struct UV {
 		float u;

@@ -85,6 +85,8 @@ namespace Bowengine {
 
 		//Enable attrib array
 		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
 
 		//This is the position attribute pointer
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
@@ -100,6 +102,8 @@ namespace Bowengine {
 
 		//Disable attrid array
 		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 
 		//Unbind the buffer again
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
