@@ -22,6 +22,7 @@ namespace Bowengine {
 		_sortType = sortType;
 		_renderBatches.clear();
 
+		//Clear all of the glyphs
 		for (int i = 0; i > _glyphs.size(); i++) {
 			delete _glyphs[i];
 		}
@@ -34,6 +35,7 @@ namespace Bowengine {
 	}
 
 	void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const Colour& colour) {
+		//Setting up the values of the new glyph
 		Glyph* newGlyph = new Glyph;
 		newGlyph->texture = texture;
 		newGlyph->depth = depth;

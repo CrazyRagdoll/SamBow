@@ -44,6 +44,9 @@ void MainGame::initSystems() {
 	//initalise the sprite batch
 	_spriteBatch.init();
 
+	//inlitalise the FPS handler
+	_fpsLimiter.init(_maxFPS);
+
 }
 
 void MainGame::initShaders() {
@@ -61,8 +64,9 @@ void MainGame::gameLoop(){
 	
 	//Loops until the gamestate is set to exit
 	while (_gameState != GameState::EXIT) {
-		//Used for frame time measuring
-		float startTicks = SDL_GetTicks();
+		
+		//Begining frame - get first tick
+		_fpsLimiter.begin();
 
 		processInput();
 		_time += 0.01;
@@ -70,7 +74,9 @@ void MainGame::gameLoop(){
 		_camera2D.update();
 
 		drawGame();
-		calculateFPS();
+
+		//Calls the end function which returns the calculated fps
+		_fps = _fpsLimiter.end();
 
 		//print FPS every 10 frames
 		static int frameCounter = 0;
@@ -79,15 +85,6 @@ void MainGame::gameLoop(){
 			std::cout << _fps << std::endl;
 			frameCounter = 0;
 		}
-
-		//How long the programe took to loop once.
-		float frameTicks = SDL_GetTicks() - startTicks;
-
-		//Limit the FPS to the max FPS
-		if (1000.0f / _maxFPS > frameTicks) {
-			SDL_Delay(1000.0f / _maxFPS - frameTicks);
-		}
-
 	}
 }
 
@@ -97,7 +94,7 @@ void MainGame::processInput() {
 
 	SDL_Event evnt;
 
-	const float CAMERA_SPEED = 20.0f;
+	const float CAMERA_SPEED = 2.0f;
 	const float SCALE_SPEED = 0.1f;
 
 	while (SDL_PollEvent(&evnt)) {	//While there is an event (returning 1/true)
@@ -109,28 +106,40 @@ void MainGame::processInput() {
 			//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 			break;
 		case SDL_KEYDOWN:
-			switch (evnt.key.keysym.sym) {
-			case SDLK_w:
-				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
-				break;
-			case SDLK_s:
-				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
-				break;
-			case SDLK_a:
-				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
-				break;
-			case SDLK_d:
-				_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
-				break;
-			case SDLK_q:
-				_camera2D.setScale(_camera2D.getScale() + SCALE_SPEED);
-				break;
-			case SDLK_e:
-				_camera2D.setScale(_camera2D.getScale() - SCALE_SPEED);
-				break;
-			}
+			_inputManager.pressKey(evnt.key.keysym.sym);
+			break;
+		case SDL_KEYUP:
+			_inputManager.releaseKey(evnt.key.keysym.sym);
+			break;
 		}
 	}
+
+	//Checking if a cetain key is pressed.
+	if (_inputManager.isKeyPressed(SDLK_w)) {
+		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
+	}
+	if (_inputManager.isKeyPressed(SDLK_s)) {
+		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
+	}
+	if (_inputManager.isKeyPressed(SDLK_a)) {
+		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
+	}
+	if (_inputManager.isKeyPressed(SDLK_d)) {
+		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
+	}
+	if (_inputManager.isKeyPressed(SDLK_q)) {
+		_camera2D.setScale(_camera2D.getScale() + SCALE_SPEED);
+	}
+	if (_inputManager.isKeyPressed(SDLK_e)) {
+		_camera2D.setScale(_camera2D.getScale() - SCALE_SPEED);
+	}
+
+	//Quit the game with escape
+	if (_inputManager.isKeyPressed(SDLK_ESCAPE)) {
+		SDL_Quit();		//Close all SDL operations
+		exit(69);		//Close the program
+	}
+
 }
 
 void MainGame::drawGame() {		//Draw content to the game
@@ -184,53 +193,4 @@ void MainGame::drawGame() {		//Draw content to the game
 
 	//Swap our buffer and draw everything to the screen
 	_window.swapBuffer();
-}
-
-//A function to calculate the FPS
-void MainGame::calculateFPS() {
-	//Average the last 10 frames for a more stable value
-	static const int NUM_SAMPLES = 10;
-	//Make an array of floats to hold the frame values
-	static float frameTimes[NUM_SAMPLES];
-	//Current frame
-	static int currentFrame = 0;
-	
-	//Using SDL_GetTicks to calcualte the difference in ticks between frames.
-	//The tics from the first frame
-	static float prevTicks = SDL_GetTicks();
-
-	//The tics form the current frame
-	float currentTicks;
-	currentTicks = SDL_GetTicks();
-
-	//The difference between the two frames in tics
-	_frameTime = currentTicks - prevTicks;
-	frameTimes[currentFrame % NUM_SAMPLES] = _frameTime;
-
-	prevTicks = currentTicks;
-
-	//Setting a count to calculate average FPS
-	int count;
-	currentFrame++;
-	if (currentFrame < NUM_SAMPLES) {
-		count = currentFrame;
-	}
-	else {
-		count = NUM_SAMPLES;
-	}
-
-	//Calculating the average Fps
-	float frameTimeAverage = 0;
-	for (int i = 0; i < count; i++) {
-		frameTimeAverage += frameTimes[i];
-	}
-	frameTimeAverage /= count;
-
-	if (frameTimeAverage > 0) {
-		_fps = 1000.0f / frameTimeAverage;
-	}
-	else {
-		_fps = 60.0f;
-	}
-
 }

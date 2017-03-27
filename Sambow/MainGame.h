@@ -12,6 +12,8 @@
 #include <Bowengine/SpriteBatch.h>
 #include <Bowengine/ResourceManager.h>
 #include <Bowengine/GLTexture.h>
+#include <Bowengine/InputManager.h>
+#include <Bowengine/Timing.h>
 
 #include <Bowengine/Camera2D.h>
 
@@ -34,7 +36,6 @@ private:
 	void gameLoop();		//The main game loop which will do all of the magic.
 	void processInput();	//Processing input from the user
 	void drawGame();		//Draw content to the game
-	void calculateFPS();	//Calculate the fps of the game
 
 	Bowengine::Window _window;	//The instance of the SDL_Window
 
@@ -48,9 +49,11 @@ private:
 
 	Bowengine::SpriteBatch _spriteBatch;
 
-	//FPS calculating variables
-	float _fps, _maxFPS, _frameTime;
+	Bowengine::InputManager _inputManager;
+	Bowengine::FpsLimiter _fpsLimiter;
 
+	//Holds the fps value
+	float _maxFPS, _fps;
 	//Make shift time variable
 	float _time;
 
