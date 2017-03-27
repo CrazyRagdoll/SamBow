@@ -69,7 +69,7 @@ void MainGame::gameLoop(){
 		_fpsLimiter.begin();
 
 		processInput();
-		_time += 0.01;
+		//_time += 0.1; //Time used for shader colour updating
 
 		_camera2D.update();
 
@@ -160,8 +160,8 @@ void MainGame::drawGame() {		//Draw content to the game
 	glUniform1i(textureLocation, 0);
 
 	//Set the constnatly changing time varaible
-	GLint timeLocation = _colourProgram.getUniformLocation("time");
-	glUniform1f(timeLocation, _time);
+	//GLint timeLocation = _colourProgram.getUniformLocation("time");
+	//glUniform1f(timeLocation, _time);
 
 	//Set the camera matrix
 	GLint pLocation = _colourProgram.getUniformLocation("P");
