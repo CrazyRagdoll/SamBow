@@ -45,4 +45,18 @@ namespace Bowengine {
 
 	}
 
+	glm::vec2 Camera2D::convertScreenToWorld(glm::vec2 screenCoords) {
+		//invert Y coordinates
+		screenCoords.y = _screenHeight - screenCoords.y;
+
+		//Make 0 the center of the screen
+		screenCoords -= glm::vec2(_screenWidth / 2, _screenHeight / 2);
+		//Scale the coordinates
+		screenCoords /= _scale;
+		//Translate with the camera
+		screenCoords += _position;
+
+		return screenCoords;
+	}
+
 }

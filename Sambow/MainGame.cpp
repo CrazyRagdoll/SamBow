@@ -73,6 +73,16 @@ void MainGame::gameLoop(){
 
 		_camera2D.update();
 
+		for (int i = 0; i < _bullets.size();) {
+			if (_bullets[i].update() == true) {
+				_bullets[i] = _bullets.back();
+				_bullets.pop_back();
+			}
+			else {
+				i++;
+			}
+		}
+
 		drawGame();
 
 		//Calls the end function which returns the calculated fps
@@ -81,7 +91,7 @@ void MainGame::gameLoop(){
 		//print FPS every 10 frames
 		static int frameCounter = 0;
 		frameCounter++;
-		if (frameCounter == 10) {
+		if (frameCounter == 1000) {
 			std::cout << _fps << std::endl;
 			frameCounter = 0;
 		}
@@ -95,15 +105,14 @@ void MainGame::processInput() {
 	SDL_Event evnt;
 
 	const float CAMERA_SPEED = 2.0f;
-	const float SCALE_SPEED = 0.1f;
+	const float SCALE_SPEED = 0.25f;
+
+	float MAX_VIEW = 5.0f, MIN_VIEW = 1.0f;
 
 	while (SDL_PollEvent(&evnt)) {	//While there is an event (returning 1/true)
 		switch (evnt.type) {		//Which type of event was it.
 		case SDL_QUIT:
 			_gameState = GameState::EXIT;
-			break;
-		case SDL_MOUSEMOTION:
-			//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 			break;
 		case SDL_KEYDOWN:
 			_inputManager.pressKey(evnt.key.keysym.sym);
@@ -111,20 +120,32 @@ void MainGame::processInput() {
 		case SDL_KEYUP:
 			_inputManager.releaseKey(evnt.key.keysym.sym);
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			_inputManager.pressKey(evnt.button.button);
+			break;
+		case SDL_MOUSEBUTTONUP:
+			_inputManager.releaseKey(evnt.button.button);
+			break;
+		case SDL_MOUSEMOTION:
+			_inputManager.setMouseCoords(evnt.motion.x, evnt.motion.y);
+			break;
+		case SDL_MOUSEWHEEL:
+			_inputManager.scrollWheel(evnt.wheel.y);
+			break;
 		}
 	}
 
 	//Checking if a cetain key is pressed.
-	if (_inputManager.isKeyPressed(SDLK_w)) {
-		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
-	}
-	if (_inputManager.isKeyPressed(SDLK_s)) {
+	if (_inputManager.isKeyPressed(SDLK_w)) {	//Move up
 		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
 	}
-	if (_inputManager.isKeyPressed(SDLK_a)) {
+	if (_inputManager.isKeyPressed(SDLK_s)) {	//move Down
+		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
+	}
+	if (_inputManager.isKeyPressed(SDLK_a)) {	//Move Left
 		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
 	}
-	if (_inputManager.isKeyPressed(SDLK_d)) {
+	if (_inputManager.isKeyPressed(SDLK_d)) {	//Move right
 		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
 	}
 	if (_inputManager.isKeyPressed(SDLK_q)) {
@@ -132,6 +153,27 @@ void MainGame::processInput() {
 	}
 	if (_inputManager.isKeyPressed(SDLK_e)) {
 		_camera2D.setScale(_camera2D.getScale() - SCALE_SPEED);
+	}
+
+	//Regulating the view distance with scroll wheel
+	float newView;
+	newView = _camera2D.getScale() + _inputManager.getScrollValue() * SCALE_SPEED;
+	//Zooming in and out with scroll wheel
+	if (newView > MIN_VIEW && newView < MAX_VIEW) {
+		_camera2D.setScale(_camera2D.getScale() + _inputManager.getScrollValue() * SCALE_SPEED);
+		_inputManager.resetScrollValue();		
+	}
+
+	if (_inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
+		glm::vec2 mouseCoords = _inputManager.getMouseCoords();
+		mouseCoords = _camera2D.convertScreenToWorld(mouseCoords);
+		
+		glm::vec2 playerPosition(0.0f);
+		glm::vec2 direction = mouseCoords - playerPosition;
+		direction = glm::normalize(direction);
+
+		_bullets.emplace_back(playerPosition, direction, 5.0f, 1000);
+
 	}
 
 	//Quit the game with escape
@@ -179,7 +221,9 @@ void MainGame::drawGame() {		//Draw content to the game
 
 	_spriteBatch.draw(pos, uv, texture.id, 0.0f, colour);
 
-	_spriteBatch.draw(pos + glm::vec4(50.0f, 0.0f, 0.0f, 0.0f), uv, texture.id, 0.0f, colour);
+	for (int i = 0; i < _bullets.size(); i++) {
+		_bullets[i].draw(_spriteBatch);
+	}
 
 	_spriteBatch.end();
 

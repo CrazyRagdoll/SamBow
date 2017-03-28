@@ -14,10 +14,11 @@
 #include <Bowengine/GLTexture.h>
 #include <Bowengine/InputManager.h>
 #include <Bowengine/Timing.h>
-
 #include <Bowengine/Camera2D.h>
 
 #include <vector>
+
+#include "Bullet.h"
 
 enum class GameState{PLAY, EXIT};
 
@@ -44,13 +45,14 @@ private:
 	GameState _gameState;	//Current state of the game (enum class)
 
 	Bowengine::GLSLProgram _colourProgram;
-
 	Bowengine::Camera2D _camera2D;
-
 	Bowengine::SpriteBatch _spriteBatch;
-
 	Bowengine::InputManager _inputManager;
 	Bowengine::FpsLimiter _fpsLimiter;
+
+
+	std::vector<Bullet> _bullets;
+
 
 	//Holds the fps value
 	float _maxFPS, _fps;

@@ -2,7 +2,7 @@
 
 namespace Bowengine {
 
-	InputManager::InputManager()
+	InputManager::InputManager() : _mouseCoords(0.0f), _scrollValue(0.0f)
 	{
 	}
 
@@ -18,6 +18,15 @@ namespace Bowengine {
 
 	void InputManager::releaseKey(unsigned int keyID) {
 		_keyMap[keyID] = false;
+	}
+
+	void InputManager::setMouseCoords(float x, float y) {
+		_mouseCoords.x = x;
+		_mouseCoords.y = y;
+	}
+
+	void InputManager::scrollWheel(float x) {
+		_scrollValue = x;
 	}
 
 	bool InputManager::isKeyPressed(unsigned int keyID) {
