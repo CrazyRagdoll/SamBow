@@ -21,7 +21,7 @@ void Bullet::draw(Bowengine::SpriteBatch& spriteBatch) {
 	Bowengine::Colour colour;
 	colour.r = 255; colour.g = 255; colour.b = 255; colour.a = 255;
 
-	glm::vec4 posAndSize = glm::vec4(_position.x, _position.y, 30, 30);
+	glm::vec4 posAndSize = glm::vec4(_position.x-15, _position.y-15, 30, 30);
 
 	spriteBatch.draw(posAndSize, uv, texture.id, 0.0f, colour);
 }

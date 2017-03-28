@@ -8,11 +8,12 @@
 MainGame::MainGame() : 
 		_screenWidth(1024), 
 		_screenHeight(768), 
-		_time(0),
+		_time(1),
 		_gameState(GameState::PLAY), 
 		_maxFPS(60.0f)
 {
 	_camera2D.init(_screenWidth, _screenHeight);
+	//_camera3D.init(_screenWidth, _screenHeight);
 }
 
 //Destructor
@@ -36,7 +37,7 @@ void MainGame::initSystems() {
 	Bowengine::init();
 
 	//Create the window
-	_window.create("SamBow Game", _screenWidth, _screenHeight, 0);
+	_window.create("Kanye Quest", _screenWidth, _screenHeight, 0);
 
 	//initalise the shaders
 	initShaders();
@@ -51,7 +52,7 @@ void MainGame::initSystems() {
 
 void MainGame::initShaders() {
 	//Using colour program to compile, init, and link our fragment + vertex shaders
-	_colourProgram.compileShaders("Shaders/colourShading.vert", "Shaders/colourShading.frag");
+	_colourProgram.compileShaders("Shaders/colourShading2.vert", "Shaders/colourShading2.frag");
 	_colourProgram.addAttribute("vertexPosition");
 	_colourProgram.addAttribute("vertexColour");
 	_colourProgram.addAttribute("VertexUV");
@@ -68,11 +69,15 @@ void MainGame::gameLoop(){
 		//Begining frame - get first tick
 		_fpsLimiter.begin();
 
+		//Process Input commands
 		processInput();
 		//_time += 0.1; //Time used for shader colour updating
 
+		//Update the cameras
 		_camera2D.update();
+		//_camera3D.update();
 
+		//Update Bullets
 		for (int i = 0; i < _bullets.size();) {
 			if (_bullets[i].update() == true) {
 				_bullets[i] = _bullets.back();
@@ -83,6 +88,7 @@ void MainGame::gameLoop(){
 			}
 		}
 
+		//Draw the game
 		drawGame();
 
 		//Calls the end function which returns the calculated fps
@@ -107,6 +113,7 @@ void MainGame::processInput() {
 	const float CAMERA_SPEED = 2.0f;
 	const float SCALE_SPEED = 0.25f;
 
+	//max and min zooms
 	float MAX_VIEW = 5.0f, MIN_VIEW = 1.0f;
 
 	while (SDL_PollEvent(&evnt)) {	//While there is an event (returning 1/true)
@@ -164,6 +171,7 @@ void MainGame::processInput() {
 		_inputManager.resetScrollValue();		
 	}
 
+	//Checking for the left mouse button and generating bullets
 	if (_inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
 		glm::vec2 mouseCoords = _inputManager.getMouseCoords();
 		mouseCoords = _camera2D.convertScreenToWorld(mouseCoords);
@@ -198,22 +206,30 @@ void MainGame::drawGame() {		//Draw content to the game
 	//Get the uniform location
 	GLint textureLocation = _colourProgram.getUniformLocation("mySampler");
 	
-	//tell the sader that the texture is in texture unit 0
+	//tell the shader that the texture is in texture unit 0
 	glUniform1i(textureLocation, 0);
 
-	//Set the constnatly changing time varaible
-	//GLint timeLocation = _colourProgram.getUniformLocation("time");
-	//glUniform1f(timeLocation, _time);
+	//Set a time variable we can change to change shader values
+	GLint timeLocation = _colourProgram.getUniformLocation("time");
+	glUniform1f(timeLocation, _time);
 
 	//Set the camera matrix
 	GLint pLocation = _colourProgram.getUniformLocation("P");
 	glm::mat4 cameraMatrix = _camera2D.getCameraMatrix();
 	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 
+	/*//Set the 3D camera
+	GLint pLocation = _colourProgram.getUniformLocation("P");
+	glm::mat4 projectionMatrix = _camera3D.getProjectionMatrix();
+	glm::mat4 viewMatrix = _camera3D.getViewMatrix();
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
+	glm::mat4 cameraMatrix = projectionMatrix * viewMatrix * modelMatrix;
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0])); */
+
 	//Calling the spritebatch
 	_spriteBatch.begin();
 
-	glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
+	glm::vec4 pos(-25.0f, -25.0f, 50.0f, 50.0f);
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
 	static Bowengine::GLTexture texture = Bowengine::ResourceManager::getTexture("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	Bowengine::Colour colour;

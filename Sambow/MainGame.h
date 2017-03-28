@@ -15,6 +15,7 @@
 #include <Bowengine/InputManager.h>
 #include <Bowengine/Timing.h>
 #include <Bowengine/Camera2D.h>
+#include <Bowengine/Camera3D.h>
 
 #include <vector>
 
@@ -46,13 +47,12 @@ private:
 
 	Bowengine::GLSLProgram _colourProgram;
 	Bowengine::Camera2D _camera2D;
+	Bowengine::Camera3D _camera3D;
 	Bowengine::SpriteBatch _spriteBatch;
 	Bowengine::InputManager _inputManager;
 	Bowengine::FpsLimiter _fpsLimiter;
 
-
 	std::vector<Bullet> _bullets;
-
 
 	//Holds the fps value
 	float _maxFPS, _fps;
