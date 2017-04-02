@@ -20,6 +20,7 @@ namespace Bowengine {
 		//Setters
 		void setPosition(const glm::vec3& newPosition) { _position = newPosition; _needsMatrixUpdate = true; }
 		void setScale(float newScale) { _scale = newScale; _needsMatrixUpdate = true; }
+		void setDirection(const glm::vec3& newDirection) { _direction = newDirection; _needsMatrixUpdate = true; }
 		void setTarget(const glm::vec3& newTarget) { _target = newTarget; _needsMatrixUpdate = true; }
 
 		//Getters
@@ -44,14 +45,14 @@ namespace Bowengine {
 		//camera field of view
 		float _fov;
 
-		//camera max view distance
-		float _maxView;
+		//camera min/max view distance
+		float _minView, _maxView;
 
 		//Camera position
 		glm::vec3 _position;
 		glm::vec3 _target;
 		glm::vec3 _direction;
-		glm::vec3 _up;
+		glm::vec3 _cameraRight, _cameraUp, _up;
 
 		//Matricies
 		glm::mat4 _projectionMatrix;

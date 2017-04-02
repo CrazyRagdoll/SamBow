@@ -6,10 +6,14 @@ namespace Bowengine {
 		_position(0.0f),
 		_target(0.0f),
 		_direction(0.0f),
+		_up(0.0f),
+		_cameraRight(0.0f),
+		_cameraUp(0.0f),
 		_projectionMatrix(1.0f),
 		_viewMatrix(1.0f),
 		_scale(1.0f),
 		_fov(45.0f),
+		_minView(0.1f),
 		_maxView(1000.0f),
 		_needsMatrixUpdate(true),
 		_screenWidth(500),
@@ -30,20 +34,21 @@ namespace Bowengine {
 
 		//Setting up a target and camera direction
 		_target = glm::vec3(0.0f, 0.0f, 0.0f);
-		_direction = glm::normalize(_position - _target);
+		_position = glm::vec3(0.0f, 0.0f, 300.0f);
+		_direction = _target - _position;
 
 		//Up & Right vectors
-		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-		glm::vec3 cameraRight = glm::normalize(glm::cross(up, _direction));
-		glm::vec3 cameraUp = glm::cross(_direction, cameraRight);
+		_up				= glm::vec3(0.0f, 1.0f, 0.0f);
+		_cameraRight	= glm::cross(_up, _direction);
+		_cameraUp		= glm::cross(_direction, _cameraRight);
 
 		//Create the projection matrix
-		_projectionMatrix = glm::perspective(_fov, 4.0f / 3.0f, 0.1f, _maxView);
+		_projectionMatrix = glm::perspective(_fov, 4.0f / 3.0f, _minView, _maxView);
 
 		//Create the view matrix
-		_viewMatrix = glm::lookAt(glm::vec3(0.0f, 0.0f, 300.0f),
-					 glm::vec3(0.0f, 0.0f, 0.0f),
-					 glm::vec3(0.0f, 1.0f, 0.0f));
+		_viewMatrix =	glm::lookAt(_position,				//Camera Position
+									_position + _direction,	//Where we're looking
+									_up);					//Up
 
 	}
 
@@ -52,8 +57,17 @@ namespace Bowengine {
 
 		if (_needsMatrixUpdate) {
 
+			//Updating the projection matrix
+			_projectionMatrix = glm::perspective(_fov, 4.0f / 3.0f, _minView, _maxView);
+
+			//Update the view matrix.
+			_viewMatrix =	glm::lookAt(_position,				//Camera Position
+										_position + _direction, //Where we're looking
+										_up);					//Up
+
 			_needsMatrixUpdate = false;
 		}
+
 	}
 
 }

@@ -10,10 +10,11 @@ MainGame::MainGame() :
 		_screenHeight(768), 
 		_time(1),
 		_gameState(GameState::PLAY), 
-		_maxFPS(60.0f)
+		_maxFPS(60.0f),
+		_cameraState(CameraState::Camera3D)
 {
 	_camera2D.init(_screenWidth, _screenHeight);
-	//_camera3D.init(_screenWidth, _screenHeight);
+	_camera3D.init(_screenWidth, _screenHeight);
 }
 
 //Destructor
@@ -74,8 +75,12 @@ void MainGame::gameLoop(){
 		//_time += 0.1; //Time used for shader colour updating
 
 		//Update the cameras
-		_camera2D.update();
-		//_camera3D.update();
+		if (_cameraState == CameraState::Camera2D) {
+			_camera2D.update();
+		} 
+		if (_cameraState == CameraState::Camera3D) {
+			_camera3D.update();
+		}
 
 		//Update Bullets
 		for (int i = 0; i < _bullets.size();) {
@@ -135,6 +140,7 @@ void MainGame::processInput() {
 			break;
 		case SDL_MOUSEMOTION:
 			_inputManager.setMouseCoords(evnt.motion.x, evnt.motion.y);
+			//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 			break;
 		case SDL_MOUSEWHEEL:
 			_inputManager.scrollWheel(evnt.wheel.y);
@@ -142,25 +148,50 @@ void MainGame::processInput() {
 		}
 	}
 
-	//Checking if a cetain key is pressed.
-	if (_inputManager.isKeyPressed(SDLK_w)) {	//Move up
-		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
+	//2D Camera - Checking if a cetain key is pressed.
+	if (_cameraState == CameraState::Camera2D) {
+		if (_inputManager.isKeyPressed(SDLK_w)) {	//Move up
+			_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
+		}
+		if (_inputManager.isKeyPressed(SDLK_s)) {	//move Down
+			_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
+		}
+		if (_inputManager.isKeyPressed(SDLK_a)) {	//Move Left
+			_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
+		}
+		if (_inputManager.isKeyPressed(SDLK_d)) {	//Move right
+			_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
+		}
+		if (_inputManager.isKeyPressed(SDLK_q)) {	//Zoom in
+			_camera2D.setScale(_camera2D.getScale() + SCALE_SPEED);
+		}
+		if (_inputManager.isKeyPressed(SDLK_e)) {	//Zoom out
+			_camera2D.setScale(_camera2D.getScale() - SCALE_SPEED);
+		}
 	}
-	if (_inputManager.isKeyPressed(SDLK_s)) {	//move Down
-		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
+
+	//3D Camera - Checking for key presses.
+	if (_cameraState == CameraState::Camera3D) {
+		if (_inputManager.isKeyPressed(SDLK_w)) {
+			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(0.0f, 0.0f, -CAMERA_SPEED));
+		}
+		if (_inputManager.isKeyPressed(SDLK_s)) {
+			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(0.0f, 0.0f,  CAMERA_SPEED));
+		}
+		if (_inputManager.isKeyPressed(SDLK_a)) {
+			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(-CAMERA_SPEED, 0.0f, 0.0f));
+		}
+		if (_inputManager.isKeyPressed(SDLK_d)) {
+			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(CAMERA_SPEED, 0.0f, 0.0f));
+		}
+		if (_inputManager.isKeyPressed(SDLK_SPACE)) {
+			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(0.0f, CAMERA_SPEED, 0.0f));
+		}
+		if (_inputManager.isKeyPressed(SDLK_z)) {
+			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(0.0f, -CAMERA_SPEED, 0.0f));
+		}
 	}
-	if (_inputManager.isKeyPressed(SDLK_a)) {	//Move Left
-		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
-	}
-	if (_inputManager.isKeyPressed(SDLK_d)) {	//Move right
-		_camera2D.setPosition(_camera2D.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
-	}
-	if (_inputManager.isKeyPressed(SDLK_q)) {
-		_camera2D.setScale(_camera2D.getScale() + SCALE_SPEED);
-	}
-	if (_inputManager.isKeyPressed(SDLK_e)) {
-		_camera2D.setScale(_camera2D.getScale() - SCALE_SPEED);
-	}
+
 
 	//Regulating the view distance with scroll wheel
 	float newView;
@@ -214,17 +245,21 @@ void MainGame::drawGame() {		//Draw content to the game
 	glUniform1f(timeLocation, _time);
 
 	//Set the camera matrix
-	GLint pLocation = _colourProgram.getUniformLocation("P");
-	glm::mat4 cameraMatrix = _camera2D.getCameraMatrix();
-	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
+	if (_cameraState == CameraState::Camera2D) {
+		GLint pLocation = _colourProgram.getUniformLocation("P");
+		glm::mat4 cameraMatrix = _camera2D.getCameraMatrix();
+		glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
+	}
 
-	/*//Set the 3D camera
-	GLint pLocation = _colourProgram.getUniformLocation("P");
-	glm::mat4 projectionMatrix = _camera3D.getProjectionMatrix();
-	glm::mat4 viewMatrix = _camera3D.getViewMatrix();
-	glm::mat4 modelMatrix = glm::mat4(1.0f);
-	glm::mat4 cameraMatrix = projectionMatrix * viewMatrix * modelMatrix;
-	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0])); */
+	//Set the 3D camera
+	if (_cameraState == CameraState::Camera3D) {
+		GLint pLocation = _colourProgram.getUniformLocation("P");
+		glm::mat4 projectionMatrix = _camera3D.getProjectionMatrix();
+		glm::mat4 viewMatrix = _camera3D.getViewMatrix();
+		glm::mat4 modelMatrix = glm::mat4(1.0f);
+		glm::mat4 cameraMatrix = projectionMatrix * viewMatrix * modelMatrix;
+		glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
+	}
 
 	//Calling the spritebatch
 	_spriteBatch.begin();

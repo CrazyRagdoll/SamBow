@@ -22,6 +22,7 @@
 #include "Bullet.h"
 
 enum class GameState{PLAY, EXIT};
+enum class CameraState{Camera2D, Camera3D};
 
 class MainGame
 {
@@ -44,6 +45,7 @@ private:
 	int _screenWidth;		//Screen's width
 	int _screenHeight;		//Screen's height
 	GameState _gameState;	//Current state of the game (enum class)
+	CameraState _cameraState; //Current camera (2d or 3d)
 
 	Bowengine::GLSLProgram _colourProgram;
 	Bowengine::Camera2D _camera2D;
