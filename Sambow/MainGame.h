@@ -8,6 +8,7 @@
 #include <Bowengine/GLSLProgram.h>
 #include <Bowengine/GLTexture.h>
 #include <Bowengine/Sprite.h>
+#include <Bowengine/Cube.h>
 #include <Bowengine/Window.h>
 #include <Bowengine/SpriteBatch.h>
 #include <Bowengine/ResourceManager.h>
@@ -53,6 +54,8 @@ private:
 	Bowengine::SpriteBatch _spriteBatch;
 	Bowengine::InputManager _inputManager;
 	Bowengine::FpsLimiter _fpsLimiter;
+
+	Bowengine::Cube _cube;
 
 	std::vector<Bullet> _bullets;
 

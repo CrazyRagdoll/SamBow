@@ -18,6 +18,8 @@ void main() {
 	
 	vec4 textureColour = texture(mySampler, fragmentUV);
 	
+	//colour = fragmentColour * time;
 	colour = textureColour * fragmentColour * time;
+	
 	
 }

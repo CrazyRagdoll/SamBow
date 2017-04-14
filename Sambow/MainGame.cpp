@@ -38,7 +38,7 @@ void MainGame::initSystems() {
 	Bowengine::init();
 
 	//Create the window
-	_window.create("Kanye Quest", _screenWidth, _screenHeight, 0);
+	_window.create("Sam Bowen's Engine", _screenWidth, _screenHeight, 0);
 
 	//initalise the shaders
 	initShaders();
@@ -48,6 +48,10 @@ void MainGame::initSystems() {
 
 	//inlitalise the FPS handler
 	_fpsLimiter.init(_maxFPS);
+
+	//Create a cube
+	_cube.init(glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, 1.0f, 1.0f, "");
+
 
 }
 
@@ -72,13 +76,12 @@ void MainGame::gameLoop(){
 
 		//Process Input commands
 		processInput();
-		//_time += 0.1; //Time used for shader colour updating
+		_time = 1.0f; //Time used for shader colour updating
 
 		//Update the cameras
 		if (_cameraState == CameraState::Camera2D) {
 			_camera2D.update();
-		} 
-		if (_cameraState == CameraState::Camera3D) {
+		} else if (_cameraState == CameraState::Camera3D) {
 			_camera3D.update();
 		}
 
@@ -115,7 +118,7 @@ void MainGame::processInput() {
 
 	SDL_Event evnt;
 
-	const float CAMERA_SPEED = 2.0f;
+	const float CAMERA_SPEED = 2.0f/100;
 	const float SCALE_SPEED = 0.25f;
 
 	//max and min zooms
@@ -190,6 +193,40 @@ void MainGame::processInput() {
 		if (_inputManager.isKeyPressed(SDLK_z)) {
 			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(0.0f, -CAMERA_SPEED, 0.0f));
 		}
+
+		//Using the mouse to rotate the camera
+		static float keyPressDuration;
+		static glm::vec2 startMouseCoords;
+		if (_inputManager.isKeyPressed(SDL_BUTTON_RIGHT)) {
+			//Hiding the mouse where it was clicked.
+			if (keyPressDuration == 0.0f) {
+				startMouseCoords = _inputManager.getMouseCoords();
+				SDL_ShowCursor(0);
+			}
+			//Warping to mouse to where it was first clicked
+			SDL_WarpMouseInWindow(_window.getWindow(), startMouseCoords.x, startMouseCoords.y);
+			
+			//get the current mouse coordinates
+			glm::vec2 currentMouseCoords = _inputManager.getMouseCoords();
+			//Work out the difference between this frame and last frame
+			glm::vec2 difMouseCoords = startMouseCoords - currentMouseCoords;
+
+			std::cout << difMouseCoords.x << " " << difMouseCoords.y << std::endl;
+
+			//Rotating the camera 
+			_camera3D.rotate(difMouseCoords.x / 1000, glm::vec3(0.0f, 1.0f, 0.0f));
+			_camera3D.rotate(difMouseCoords.y / 1000, glm::vec3(1.0f, 0.0f, 0.0f));
+
+			//Counting how long the click is held down.
+			keyPressDuration += 0.1f;
+		}
+		else {
+			//if the right mouse button is not held down
+			SDL_ShowCursor(1);
+			keyPressDuration = 0.0f;
+		}
+
+
 	}
 
 
@@ -236,7 +273,6 @@ void MainGame::drawGame() {		//Draw content to the game
 	glActiveTexture(GL_TEXTURE0);
 	//Get the uniform location
 	GLint textureLocation = _colourProgram.getUniformLocation("mySampler");
-	
 	//tell the shader that the texture is in texture unit 0
 	glUniform1i(textureLocation, 0);
 
@@ -256,13 +292,16 @@ void MainGame::drawGame() {		//Draw content to the game
 		GLint pLocation = _colourProgram.getUniformLocation("P");
 		glm::mat4 projectionMatrix = _camera3D.getProjectionMatrix();
 		glm::mat4 viewMatrix = _camera3D.getViewMatrix();
-		glm::mat4 modelMatrix = glm::mat4(1.0f);
+		glm::mat4 modelMatrix = _camera3D.getModelMatrix();
 		glm::mat4 cameraMatrix = projectionMatrix * viewMatrix * modelMatrix;
 		glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 	}
 
+	//Drawing a cube.
+	_cube.draw();
+
 	//Calling the spritebatch
-	_spriteBatch.begin();
+	/*_spriteBatch.begin();
 
 	glm::vec4 pos(-25.0f, -25.0f, 50.0f, 50.0f);
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
@@ -278,7 +317,7 @@ void MainGame::drawGame() {		//Draw content to the game
 
 	_spriteBatch.end();
 
-	_spriteBatch.renderBatch();
+	_spriteBatch.renderBatch();*/
 
 	//unbind the texture
 	glBindTexture(GL_TEXTURE_2D, 0);

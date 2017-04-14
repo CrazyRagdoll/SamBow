@@ -12,14 +12,18 @@ namespace Bowengine {
 		~Camera3D();
 
 		//Init function
-		void init(int screenWidth, int screenHeight);
+		void init(int screenWidth, int screenHeight, glm::vec3& target = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 position = glm::vec3(0.0f, 0.0f, 5.0f));
 
 		//Camera update function
 		void update();
 
+		//Movement Functions
+		void rotate(float angle, glm::vec3 axis);
+		void rotateTarget(float angle, glm::vec3 axis);
+		void zoom(float zoom);
+
 		//Setters
 		void setPosition(const glm::vec3& newPosition) { _position = newPosition; _needsMatrixUpdate = true; }
-		void setScale(float newScale) { _scale = newScale; _needsMatrixUpdate = true; }
 		void setDirection(const glm::vec3& newDirection) { _direction = newDirection; _needsMatrixUpdate = true; }
 		void setTarget(const glm::vec3& newTarget) { _target = newTarget; _needsMatrixUpdate = true; }
 
@@ -27,9 +31,9 @@ namespace Bowengine {
 		glm::vec3 getPosition() { return _position; }
 		glm::vec3 getTarget() { return _target; }
 		glm::vec3 getDirection() { return _direction; }
-		float getScale() { return _scale; }
 		glm::mat4 getProjectionMatrix() { return _projectionMatrix; }
 		glm::mat4 getViewMatrix() { return _viewMatrix; }
+		glm::mat4 getModelMatrix() { return _modelMatrix; }
 
 	private:
 
@@ -39,11 +43,11 @@ namespace Bowengine {
 		//bool for camera update
 		bool _needsMatrixUpdate;
 
-		//camera scale
-		float _scale;
-
 		//camera field of view
 		float _fov;
+
+		//Camera Aspect Ration
+		float _aspect;
 
 		//camera min/max view distance
 		float _minView, _maxView;
@@ -57,6 +61,7 @@ namespace Bowengine {
 		//Matricies
 		glm::mat4 _projectionMatrix;
 		glm::mat4 _viewMatrix;
+		glm::mat4 _modelMatrix;
 	};
 
 }

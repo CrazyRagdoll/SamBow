@@ -65,7 +65,7 @@ namespace Bowengine {
 		//attribute pointers and it binds the VBO
 		glBindVertexArray(_vao);
 
-		for (int i = 0; i < _renderBatches.size(); i++)	{
+		for (int i = 0; i < _renderBatches.size(); i++) {
 			glBindTexture(GL_TEXTURE_2D, _renderBatches[i].texture);
 
 			glDrawArrays(GL_TRIANGLES, _renderBatches[i].offset, _renderBatches[i].numVertices);
@@ -89,7 +89,7 @@ namespace Bowengine {
 		int offset = 0; //current offset
 		int cv = 0; //curent vertex
 
-		//Add the first batch
+					//Add the first batch
 		_renderBatches.emplace_back(offset, 6, _glyphs[0]->texture);
 		vertices[cv++] = _glyphs[0]->topLeft;
 		vertices[cv++] = _glyphs[0]->bottomLeft;
@@ -106,7 +106,8 @@ namespace Bowengine {
 			if (_glyphs[cg]->texture != _glyphs[cg - 1]->texture) {
 				//Make a new batch
 				_renderBatches.emplace_back(offset, 6, _glyphs[cg]->texture);
-			} else {
+			}
+			else {
 				//if its part of the current batch, just increase m
 				_renderBatches.back().numVertices += 6;
 			}
@@ -125,7 +126,7 @@ namespace Bowengine {
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 		//upload the data
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
-		
+
 		//unbind the buffer
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -137,7 +138,7 @@ namespace Bowengine {
 		if (_vao == 0) {
 			glGenVertexArrays(1, &_vao);
 		}
-		
+
 		//Bind the VAO. all subsequent opengl calls will modify its state
 		glBindVertexArray(_vao);
 
@@ -178,7 +179,7 @@ namespace Bowengine {
 			std::stable_sort(_glyphs.begin(), _glyphs.end(), compareTexture);
 			break;
 		}
-		
+
 	}
 
 	//Comparative functions

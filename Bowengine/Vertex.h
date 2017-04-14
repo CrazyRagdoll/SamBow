@@ -9,6 +9,7 @@ namespace Bowengine {
 	struct Position {
 		float x;
 		float y;
+		float z;
 	};
 
 	struct Colour {
@@ -49,6 +50,36 @@ namespace Bowengine {
 			uv.u = u;
 			uv.v = v;
 		}
+	};
+
+	struct Vertex3D {
+
+		Position position;
+
+		//4 byte struct for colour
+		Colour colour;
+
+		//UV texture coordinates 
+		UV uv;
+
+		void setPosition(float x, float y, float z) {
+			position.x = x;
+			position.y = y;
+			position.z = z;
+		}
+
+		void setColour(GLubyte r, GLubyte g, GLubyte b, GLubyte a) {
+			colour.r = r;
+			colour.g = g;
+			colour.b = b;
+			colour.a = a;
+		}
+
+		void setUV(float u, float v) {
+			uv.u = u;
+			uv.v = v;
+		}
+
 	};
 
 }
