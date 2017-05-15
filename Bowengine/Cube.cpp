@@ -56,7 +56,6 @@ namespace Bowengine {
 
 		//Front face
 		vertexData[0].setPosition(FrontTL.x, FrontTL.y, FrontTL.z);		//Front Top Left
-		vertexData[0].setUV(1.0f, 0.0f);
 		vertexData[1].setPosition(FrontBL.x, FrontBL.y, FrontBL.z);		//Front Bottom Left
 		vertexData[2].setPosition(FrontBR.x, FrontBR.y, FrontBR.z);		//Front Bottom Right
 
@@ -116,7 +115,7 @@ namespace Bowengine {
 		}
 
 		for (int i = 0; i < 36; i++) {
-			vertexData[i].setUV(1.0f, 0.0f);
+			vertexData[i].setUV(0.0f, 0.0f);
 		}
 
 		//Bind the buffer to ARRAY_BUFFER with our ID

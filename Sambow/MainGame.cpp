@@ -118,7 +118,7 @@ void MainGame::processInput() {
 
 	SDL_Event evnt;
 
-	const float CAMERA_SPEED = 2.0f/100;
+	const float CAMERA_SPEED = 0.20f;
 	const float SCALE_SPEED = 0.25f;
 
 	//max and min zooms
@@ -176,16 +176,16 @@ void MainGame::processInput() {
 	//3D Camera - Checking for key presses.
 	if (_cameraState == CameraState::Camera3D) {
 		if (_inputManager.isKeyPressed(SDLK_w)) {
-			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(0.0f, 0.0f, -CAMERA_SPEED));
+			_camera3D.setPosition(_camera3D.getPosition() + (_camera3D.getDirection() * glm::vec3(CAMERA_SPEED)));
 		}
 		if (_inputManager.isKeyPressed(SDLK_s)) {
-			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(0.0f, 0.0f,  CAMERA_SPEED));
+			_camera3D.setPosition(_camera3D.getPosition() - (_camera3D.getDirection() * glm::vec3(CAMERA_SPEED)));
 		}
 		if (_inputManager.isKeyPressed(SDLK_a)) {
-			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(-CAMERA_SPEED, 0.0f, 0.0f));
+			_camera3D.setPosition(_camera3D.getPosition() - (_camera3D.getDirectionRight() * glm::vec3(CAMERA_SPEED)));
 		}
 		if (_inputManager.isKeyPressed(SDLK_d)) {
-			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(CAMERA_SPEED, 0.0f, 0.0f));
+			_camera3D.setPosition(_camera3D.getPosition() + (_camera3D.getDirectionRight() * glm::vec3(CAMERA_SPEED)));
 		}
 		if (_inputManager.isKeyPressed(SDLK_SPACE)) {
 			_camera3D.setPosition(_camera3D.getPosition() + glm::vec3(0.0f, CAMERA_SPEED, 0.0f));
@@ -211,11 +211,11 @@ void MainGame::processInput() {
 			//Work out the difference between this frame and last frame
 			glm::vec2 difMouseCoords = startMouseCoords - currentMouseCoords;
 
-			std::cout << difMouseCoords.x << " " << difMouseCoords.y << std::endl;
+			//std::cout << difMouseCoords.x << " " << difMouseCoords.y << std::endl;
+			//std::cout << _camera3D.getDirection().x << " " << _camera3D.getDirection().y << " " << _camera3D.getDirection().z << std::endl;
 
 			//Rotating the camera 
-			_camera3D.rotate(difMouseCoords.x / 1000, glm::vec3(0.0f, 1.0f, 0.0f));
-			_camera3D.rotate(difMouseCoords.y / 1000, glm::vec3(1.0f, 0.0f, 0.0f));
+			_camera3D.rotateDirection(difMouseCoords.x / 1000, difMouseCoords.y / 1000);
 
 			//Counting how long the click is held down.
 			keyPressDuration += 0.1f;

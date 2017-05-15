@@ -2,9 +2,16 @@
 
 #include <glm/gtx/rotate_vector.hpp>
 
+#include <iostream>
+
 namespace Bowengine {
 
+	double PI = 3.141592653589793238462643383279502884197169399375105820974f;
+	double TO_DEG = 180 / PI;
+	
 	Camera3D::Camera3D() :
+		_horizontalAngle(PI),
+		_verticalAngle(0.0f),
 		_position(0.0f),
 		_target(0.0f),
 		_direction(0.0f),
@@ -38,12 +45,16 @@ namespace Bowengine {
 		//Setting up a target and camera direction
 		_target = target;
 		_position = position;
-		_direction = _target - _position;
+		_direction = glm::normalize(_target - _position);
 
 		//Up & Right vectors
 		_up				= glm::vec3(0.0f, 1.0f, 0.0f);
 		_cameraRight	= glm::cross(_up, _direction);
 		_cameraUp		= glm::cross(_direction, _cameraRight);
+
+		//Update the horizontal and vertical angles based on current direction
+		_horizontalAngle = PI + atan(_direction.x / _direction.z);
+		_verticalAngle	 = atan(_direction.y / -_direction.z);
 
 		//Create the projection matrix
 		_projectionMatrix = glm::perspective(_fov, _aspect, _minView, _maxView);
@@ -73,8 +84,32 @@ namespace Bowengine {
 
 	}
 
-	//Camera rotate function
-	void Camera3D::rotate(float angle, glm::vec3 axis) {
+	//Camera direction rotation function
+	void Camera3D::rotateDirection(float x, float y) {
+		//incrementing the angles
+		_horizontalAngle += x;
+		_verticalAngle += y;
+
+		_cameraRight = glm::vec3(
+			sin(_horizontalAngle - PI / 2.0f),		// x axis, sin(Pi - pi/2) = 1
+			0,
+			cos(_horizontalAngle - PI / 2.0f));	// z axis, cos(pi - pi/2) = 0
+
+		_direction = glm::vec3(
+			cos(_verticalAngle) * sin(_horizontalAngle),
+			sin(_verticalAngle),
+			cos(_verticalAngle) * cos(_horizontalAngle)
+		);
+
+		_up = glm::cross(_cameraRight, _direction);
+
+		std::cout << _horizontalAngle << " " << _verticalAngle << std::endl;
+
+		_needsMatrixUpdate = true;
+	}
+
+	//Camera rotate function around an axis
+	void Camera3D::rotateAxis(float angle, glm::vec3 axis) {
 		//Rotate the direction around the different axis to change where the camera is looking.
 		if (axis == glm::vec3(1.0f, 0.0f, 0.0f)) {
 			_direction = glm::rotateX(_direction, angle);
@@ -82,7 +117,7 @@ namespace Bowengine {
 		else if (axis == glm::vec3(0.0f, 1.0f, 0.0f)) {
 			_direction = glm::rotateY(_direction, angle);
 		}
-		else {
+		else if (axis == glm::vec3(0.0f, 0.0f, 1.0f)) {
 			_direction = glm::rotateZ(_direction, angle);
 		}
 		_needsMatrixUpdate = true;
