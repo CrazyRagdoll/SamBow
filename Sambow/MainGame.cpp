@@ -31,7 +31,7 @@ void MainGame::run() {
 	//Run the game loop
 	gameLoop();
 }
-
+ 
 
 //Inialise everything needed to run the game
 void MainGame::initSystems() {
@@ -50,7 +50,7 @@ void MainGame::initSystems() {
 	_fpsLimiter.init(_maxFPS);
 
 	//Create a cube
-	_cube.init(glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, 1.0f, 1.0f, "");
+	_cube.init(glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, 1.0f, 1.0f, "Textures/Cube.png");
 
 
 }
@@ -211,9 +211,6 @@ void MainGame::processInput() {
 			//Work out the difference between this frame and last frame
 			glm::vec2 difMouseCoords = startMouseCoords - currentMouseCoords;
 
-			//std::cout << difMouseCoords.x << " " << difMouseCoords.y << std::endl;
-			//std::cout << _camera3D.getDirection().x << " " << _camera3D.getDirection().y << " " << _camera3D.getDirection().z << std::endl;
-
 			//Rotating the camera 
 			_camera3D.rotateDirection(difMouseCoords.x / 1000, difMouseCoords.y / 1000);
 
@@ -239,7 +236,7 @@ void MainGame::processInput() {
 		_inputManager.resetScrollValue();		
 	}
 
-	//Checking for the left mouse button and generating bullets
+	/*//Checking for the left mouse button and generating bullets
 	if (_inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
 		glm::vec2 mouseCoords = _inputManager.getMouseCoords();
 		mouseCoords = _camera2D.convertScreenToWorld(mouseCoords);
@@ -250,7 +247,7 @@ void MainGame::processInput() {
 
 		_bullets.emplace_back(playerPosition, direction, 5.0f, 1000);
 
-	}
+	}*/
 
 	//Quit the game with escape
 	if (_inputManager.isKeyPressed(SDLK_ESCAPE)) {
@@ -277,8 +274,8 @@ void MainGame::drawGame() {		//Draw content to the game
 	glUniform1i(textureLocation, 0);
 
 	//Set a time variable we can change to change shader values
-	GLint timeLocation = _colourProgram.getUniformLocation("time");
-	glUniform1f(timeLocation, _time);
+	//GLint timeLocation = _colourProgram.getUniformLocation("time");
+	//glUniform1f(timeLocation, _time);
 
 	//Set the camera matrix
 	if (_cameraState == CameraState::Camera2D) {
@@ -300,8 +297,8 @@ void MainGame::drawGame() {		//Draw content to the game
 	//Drawing a cube.
 	_cube.draw();
 
-	//Calling the spritebatch
-	/*_spriteBatch.begin();
+	/*//Calling the spritebatch
+	_spriteBatch.begin();
 
 	glm::vec4 pos(-25.0f, -25.0f, 50.0f, 50.0f);
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);

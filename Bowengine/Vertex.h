@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 namespace Bowengine {
 
@@ -78,6 +79,12 @@ namespace Bowengine {
 		void setUV(float u, float v) {
 			uv.u = u;
 			uv.v = v;
+		}
+
+		void setPosXYZ(glm::vec3 pos) {
+			position.x = pos.x;
+			position.y = pos.y;
+			position.z = pos.z;
 		}
 
 	};

@@ -12,7 +12,7 @@ namespace Bowengine {
 		~Camera3D();
 
 		//Init function
-		void init(int screenWidth, int screenHeight, glm::vec3& target = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 position = glm::vec3(5.0f, 0.0f, 5.0f));
+		void init(int screenWidth, int screenHeight, glm::vec3& target = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 position = glm::vec3(0.0f, 0.0f, 50.0f));
 
 		//Camera update function
 		void update();

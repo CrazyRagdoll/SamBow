@@ -34,88 +34,114 @@ namespace Bowengine {
 			_texture.id = 0;
 		}
 
-
 		//Generate the buffer
 		if (_vboID == 0) {
 			glGenBuffers(1, &_vboID);
 		}
 
 		//Define all 8 corners beforehand T=Top, B=Bottm, L=Left, R=Right
-		glm::vec3 FrontTL = glm::vec3(_position.x - _width / 2, _position.y + _height / 2, _position.z + _depth / 2);
-		glm::vec3 FrontBL = glm::vec3(_position.x - _width / 2, _position.y - _height / 2, _position.z + _depth / 2);
-		glm::vec3 FrontTR = glm::vec3(_position.x + _width / 2, _position.y + _height / 2, _position.z + _depth / 2);
-		glm::vec3 FrontBR = glm::vec3(_position.x + _width / 2, _position.y - _height / 2, _position.z + _depth / 2);
+		glm::vec3 FrontTL = glm::vec3(_position.x - _width / 2, _position.y + _height / 2, _position.z + _depth / 2);	// -1,  1,  1
+		glm::vec3 FrontBL = glm::vec3(_position.x - _width / 2, _position.y - _height / 2, _position.z + _depth / 2);	// -1, -1,  1
+		glm::vec3 FrontTR = glm::vec3(_position.x + _width / 2, _position.y + _height / 2, _position.z + _depth / 2);	//  1,  1,  1
+		glm::vec3 FrontBR = glm::vec3(_position.x + _width / 2, _position.y - _height / 2, _position.z + _depth / 2);	//  1, -1,  1
 
-		glm::vec3 BackTL = glm::vec3(_position.x - _width / 2, _position.y + _height / 2, _position.z - _depth / 2);
-		glm::vec3 BackBL = glm::vec3(_position.x - _width / 2, _position.y - _height / 2, _position.z - _depth / 2);
-		glm::vec3 BackTR = glm::vec3(_position.x + _width / 2, _position.y + _height / 2, _position.z - _depth / 2);
-		glm::vec3 BackBR = glm::vec3(_position.x + _width / 2, _position.y - _height / 2, _position.z - _depth / 2);
+		glm::vec3 BackTL = glm::vec3(_position.x - _width / 2, _position.y + _height / 2, _position.z - _depth / 2);	// -1,  1, -1
+		glm::vec3 BackBL = glm::vec3(_position.x - _width / 2, _position.y - _height / 2, _position.z - _depth / 2);	// -1, -1, -1
+		glm::vec3 BackTR = glm::vec3(_position.x + _width / 2, _position.y + _height / 2, _position.z - _depth / 2);	//  1,  1, -1
+		glm::vec3 BackBR = glm::vec3(_position.x + _width / 2, _position.y - _height / 2, _position.z - _depth / 2);	//  1, -1, -1
 
 		//A cube is 6 faces of 2 triangles with 3 vertices each: 3*2*6 = 36
 		Vertex3D vertexData[36];
 
-		//Front face
-		vertexData[0].setPosition(FrontTL.x, FrontTL.y, FrontTL.z);		//Front Top Left
-		vertexData[1].setPosition(FrontBL.x, FrontBL.y, FrontBL.z);		//Front Bottom Left
-		vertexData[2].setPosition(FrontBR.x, FrontBR.y, FrontBR.z);		//Front Bottom Right
+		vertexData[0].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));	
+		vertexData[1].setPosXYZ(glm::vec3(-1.0f, -1.0f, 1.0f));		
+		vertexData[2].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));	
 
-		vertexData[3].setPosition(FrontBR.x, FrontBR.y, FrontBR.z);		//Front Bottom Right
-		vertexData[4].setPosition(FrontTR.x, FrontTR.y, FrontTR.z);		//Front Top Right
-		vertexData[5].setPosition(FrontTL.x, FrontTL.y, FrontTL.z);		//Front Top Left
+		vertexData[3].setPosXYZ(glm::vec3(1.0f, 1.0f, -1.0f));
+		vertexData[4].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));
+		vertexData[5].setPosXYZ(glm::vec3(-1.0f, 1.0f, -1.0f));	
 
-		//Right face
-		vertexData[6].setPosition(FrontTR.x, FrontTR.y, FrontTR.z);		//Front Top Right
-		vertexData[7].setPosition(FrontBR.x, FrontBR.y, FrontBR.z);		//Front Bottom Right
-		vertexData[8].setPosition(BackBR.x, BackBR.y, BackBR.z);		//Back Bottom Right
+		vertexData[6].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));	
+		vertexData[7].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));	
+		vertexData[8].setPosXYZ(glm::vec3(1.0f, -1.0f, -1.0f));
 
-		vertexData[9].setPosition(BackBR.x, BackBR.y, BackBR.z);		//Back Bottom Right
-		vertexData[10].setPosition(BackTR.x, BackTR.y, BackTR.z);		//Front Top Right
-		vertexData[11].setPosition(FrontTR.x, FrontTR.y, FrontTR.z);	//Front Top Right
+		vertexData[9].setPosXYZ(glm::vec3(1.0f, 1.0f, -1.0f));
+		vertexData[10].setPosXYZ(glm::vec3(1.0f, -1.0f, -1.0f));	
+		vertexData[11].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));	
 
-		//Back face
-		vertexData[12].setPosition(BackTR.x, BackTR.y, BackTR.z);		//Back Top Right
-		vertexData[13].setPosition(BackBR.x, BackBR.y, BackBR.z);		//Back Bottom Right
-		vertexData[14].setPosition(BackBL.x, BackBL.y, BackBL.z);		//Back Bottom Left
+		vertexData[12].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));	
+		vertexData[13].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));		
+		vertexData[14].setPosXYZ(glm::vec3(-1.0f, 1.0f, -1.0f));	
 
-		vertexData[15].setPosition(BackBL.x, BackBL.y, BackBL.z);		//Back Bottom Left
-		vertexData[16].setPosition(BackTL.x, BackTL.y, BackTL.z);		//Back Top Left
-		vertexData[17].setPosition(BackTR.x, BackTR.y, BackTR.z);		//Back Top Right
+		vertexData[15].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));	
+		vertexData[16].setPosXYZ(glm::vec3(-1.0f, -1.0f, 1.0f));	
+		vertexData[17].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));
 
-		//Left face
-		vertexData[18].setPosition(BackTL.x, BackTL.y, BackTL.z);		//Back Top Left
-		vertexData[19].setPosition(BackBL.x, BackBL.y, BackBL.z);		//Back Bottom Left
-		vertexData[20].setPosition(FrontBL.x, FrontBL.y, FrontBL.z);	//Front Bottom Left
+		vertexData[18].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));	
+		vertexData[19].setPosXYZ(glm::vec3(-1.0f, -1.0f, 1.0f));	
+		vertexData[20].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));	
 
-		vertexData[21].setPosition(FrontBL.x, FrontBL.y, FrontBL.z);	//Front Bottom Left
-		vertexData[22].setPosition(FrontTL.x, FrontTL.y, FrontTL.z);	//Front Top Left
-		vertexData[23].setPosition(BackTL.x, BackTL.y, BackTL.z);		//Back Top Left
+		vertexData[21].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
+		vertexData[22].setPosXYZ(glm::vec3(1.0f, -1.0f, -1.0f));
+		vertexData[23].setPosXYZ(glm::vec3(1.0f, 1.0f, -1.0f));	
 
-		//Top face
-		vertexData[24].setPosition(BackTL.x, BackTL.y, BackTL.z);		//Back Top Left
-		vertexData[25].setPosition(FrontTL.x, FrontTL.y, FrontTL.z);	//Front Top Left
-		vertexData[26].setPosition(FrontTR.x, FrontTR.y, FrontTR.z);	//Front Top Right
+		vertexData[24].setPosXYZ(glm::vec3(1.0f, -1.0f, -1.0f));	
+		vertexData[25].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
+		vertexData[26].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));		
 
-		vertexData[27].setPosition(FrontTR.x, FrontTR.y, FrontTR.z);	//Front Top Right
-		vertexData[28].setPosition(BackTR.x, BackTR.y, BackTR.z);		//Back Top Right
-		vertexData[29].setPosition(BackTL.x, BackTL.y, BackTL.z);		//Back Top Left
+		vertexData[27].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
+		vertexData[28].setPosXYZ(glm::vec3(1.0f, 1.0f, -1.0f));		
+		vertexData[29].setPosXYZ(glm::vec3(-1.0f, 1.0f, -1.0f));	
 
-		//Bottom face
-		vertexData[30].setPosition(FrontBL.x, FrontBL.y, FrontBL.z);	//Front Bottom Left
-		vertexData[31].setPosition(BackBL.x, BackBL.y, BackBL.z);		//Back Bottom Left
-		vertexData[32].setPosition(BackBR.x, BackBR.y, BackBR.z);		//Back Bottom Right
+		vertexData[30].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
+		vertexData[31].setPosXYZ(glm::vec3(-1.0f, 1.0f, -1.0f));
+		vertexData[32].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));	
 
-		vertexData[33].setPosition(BackBR.x, BackBR.y, BackBR.z);		//Back Bottom Right
-		vertexData[34].setPosition(FrontBR.x, FrontBR.y, FrontBR.z);	//Front Bottom Right
-		vertexData[35].setPosition(FrontBL.x, FrontBL.y, FrontBL.z);	//Front Bototm Left 
+		vertexData[33].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
+		vertexData[34].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));	
+		vertexData[35].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));	
+
+		vertexData[0].setUV(0.000059f, 1.0f - 0.000004f);
+		vertexData[1].setUV(0.000103f, 1.0f - 0.336048f);
+		vertexData[2].setUV(0.335973f, 1.0f - 0.335903f);
+		vertexData[3].setUV(1.000023f, 1.0f - 0.000013f);
+		vertexData[4].setUV(0.667979f, 1.0f - 0.335851f);
+		vertexData[5].setUV(0.999958f, 1.0f - 0.336064f);
+		vertexData[6].setUV(0.667979f, 1.0f - 0.335851f);
+		vertexData[7].setUV(0.336024f, 1.0f - 0.671877f);
+		vertexData[8].setUV(0.667969f, 1.0f - 0.671889f);
+		vertexData[9].setUV(1.000023f, 1.0f - 0.000013f);
+		vertexData[10].setUV(0.668104f, 1.0f - 0.000013f);
+		vertexData[11].setUV(0.667979f, 1.0f - 0.335851f);
+		vertexData[12].setUV(0.000059f, 1.0f - 0.000004f);
+		vertexData[13].setUV(0.335973f, 1.0f - 0.335903f);
+		vertexData[14].setUV(0.336098f, 1.0f - 0.000071f);
+		vertexData[15].setUV(0.667979f, 1.0f - 0.335851f);
+		vertexData[16].setUV(0.335973f, 1.0f - 0.335903f);
+		vertexData[17].setUV(0.336024f, 1.0f - 0.671877f);
+		vertexData[18].setUV(1.000004f, 1.0f - 0.671847f);
+		vertexData[19].setUV(0.999958f, 1.0f - 0.336064f);
+		vertexData[20].setUV(0.667979f, 1.0f - 0.335851f);
+		vertexData[21].setUV(0.668104f, 1.0f - 0.000013f);
+		vertexData[22].setUV(0.335973f, 1.0f - 0.335903f);
+		vertexData[23].setUV(0.667979f, 1.0f - 0.335851f);
+		vertexData[24].setUV(0.335973f, 1.0f - 0.335903f);
+		vertexData[25].setUV(0.668104f, 1.0f - 0.000013f);
+		vertexData[26].setUV(0.336098f, 1.0f - 0.000071f);
+		vertexData[27].setUV(0.000103f, 1.0f - 0.336048f);
+		vertexData[28].setUV(0.000004f, 1.0f - 0.671870f);
+		vertexData[29].setUV(0.336024f, 1.0f - 0.671877f);
+		vertexData[30].setUV(0.000103f, 1.0f - 0.336048f);
+		vertexData[31].setUV(0.336024f, 1.0f - 0.671877f);
+		vertexData[32].setUV(0.335973f, 1.0f - 0.335903f);
+		vertexData[33].setUV(0.667969f, 1.0f - 0.671889f);
+		vertexData[34].setUV(1.000004f, 1.0f - 0.671847f);
+		vertexData[35].setUV(0.667979f, 1.0f - 0.335851f);
 
 		_vertexSize = sizeof(vertexData);
 
 		for (int i = 0; i < 36; i++) {
-			vertexData[i].setColour(255, 0, 0, 255);
-		}
-
-		for (int i = 0; i < 36; i++) {
-			vertexData[i].setUV(0.0f, 0.0f);
+			vertexData[i].setColour(0, 0, 0, 255);
 		}
 
 		//Bind the buffer to ARRAY_BUFFER with our ID
@@ -131,7 +157,7 @@ namespace Bowengine {
 	void Cube::draw() {
 
 		//Bind the texture to the sprite.
-		glBindTexture(GL_TEXTURE_3D, _texture.id);
+		glBindTexture(GL_TEXTURE_2D, _texture.id);
 
 		//Binding the buffer again - You can only have one bound at at time
 		glBindBuffer(GL_ARRAY_BUFFER, _vboID);

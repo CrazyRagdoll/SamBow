@@ -52,10 +52,6 @@ namespace Bowengine {
 		_cameraRight	= glm::cross(_up, _direction);
 		_cameraUp		= glm::cross(_direction, _cameraRight);
 
-		//Update the horizontal and vertical angles based on current direction
-		_horizontalAngle = PI + atan(_direction.x / _direction.z);
-		_verticalAngle	 = atan(_direction.y / -_direction.z);
-
 		//Create the projection matrix
 		_projectionMatrix = glm::perspective(_fov, _aspect, _minView, _maxView);
 
@@ -93,7 +89,7 @@ namespace Bowengine {
 		_cameraRight = glm::vec3(
 			sin(_horizontalAngle - PI / 2.0f),		// x axis, sin(Pi - pi/2) = 1
 			0,
-			cos(_horizontalAngle - PI / 2.0f));	// z axis, cos(pi - pi/2) = 0
+			cos(_horizontalAngle - PI / 2.0f));		// z axis, cos(pi - pi/2) = 0
 
 		_direction = glm::vec3(
 			cos(_verticalAngle) * sin(_horizontalAngle),
@@ -102,8 +98,6 @@ namespace Bowengine {
 		);
 
 		_up = glm::cross(_cameraRight, _direction);
-
-		std::cout << _horizontalAngle << " " << _verticalAngle << std::endl;
 
 		_needsMatrixUpdate = true;
 	}
