@@ -23,7 +23,7 @@ namespace Bowengine {
 		//check if the texture is not in the map
 		if (mit == _textureMap.end()) {
 			//Load Texture
-			GLTexture newTexture = ImageLoader::loadPNG(texturePath);
+			GLTexture newTexture = ImageLoader::loadImage(texturePath);
 
 			//insert new texture into map
 			_textureMap.insert(make_pair(texturePath, newTexture));

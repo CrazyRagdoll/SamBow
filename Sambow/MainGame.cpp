@@ -302,7 +302,7 @@ void MainGame::drawGame() {		//Draw content to the game
 
 	glm::vec4 pos(-25.0f, -25.0f, 50.0f, 50.0f);
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
-	static Bowengine::GLTexture texture = Bowengine::ResourceManager::getTexture("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	static Bowengine::GLTexture texture = Bowengine::ResourceManager::getTexture("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png"); 
 	Bowengine::Colour colour;
 	colour.r = 255; colour.g = 255; colour.b = 255; colour.a = 255;
 

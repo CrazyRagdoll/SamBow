@@ -10,7 +10,9 @@ namespace Bowengine {
 	{
 	public:
 
+		static GLTexture loadImage(std::string filePath);
 		static GLTexture loadPNG(std::string filePath);
+		static GLTexture loadBMP(std::string filePath);
 
 	};
 
