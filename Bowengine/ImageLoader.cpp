@@ -143,10 +143,12 @@ namespace Bowengine {
 		//Set some texture parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-		//Generate the mipmaps
+		// Generate mipmaps, by the way.
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		//Unbind the texture

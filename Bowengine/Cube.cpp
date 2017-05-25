@@ -101,6 +101,12 @@ namespace Bowengine {
 		vertexData[34].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));	
 		vertexData[35].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));	
 
+		for (int i = 0; i < 36; i++)
+		{
+			vertexData[i].setUV(1.0f, 1.0f);
+		}
+
+		
 		vertexData[0].setUV(0.000059f, 1.0f - 0.000004f);
 		vertexData[1].setUV(0.000103f, 1.0f - 0.336048f);
 		vertexData[2].setUV(0.335973f, 1.0f - 0.335903f);
@@ -136,7 +142,7 @@ namespace Bowengine {
 		vertexData[32].setUV(0.335973f, 1.0f - 0.335903f);
 		vertexData[33].setUV(0.667969f, 1.0f - 0.671889f);
 		vertexData[34].setUV(1.000004f, 1.0f - 0.671847f);
-		vertexData[35].setUV(0.667979f, 1.0f - 0.335851f);
+		vertexData[35].setUV(0.667979f, 1.0f - 0.335851f); 
 
 		_vertexSize = sizeof(vertexData);
 

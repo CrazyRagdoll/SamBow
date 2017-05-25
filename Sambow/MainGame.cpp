@@ -322,6 +322,9 @@ void MainGame::drawGame() {		//Draw content to the game
 	//disable the shader
 	_colourProgram.unuse();
 
+	//Cull triangles 
+	glEnable(GL_CULL_FACE);
+
 	//Swap our buffer and draw everything to the screen
 	_window.swapBuffer();
 }
