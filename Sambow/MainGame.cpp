@@ -49,9 +49,11 @@ void MainGame::initSystems() {
 	//inlitalise the FPS handler
 	_fpsLimiter.init(_maxFPS);
 
-	//Create a cube
-	_cube.init(glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, 1.0f, 1.0f, "Textures/Cube.png");
+	//Load a cube
+	_cubeAgent.init("Objects/Cube.obj", "Textures/Cube.png");
 
+	//Create a cube
+	//_cube.init(glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, 1.0f, 1.0f, "Textures/Cube.png");
 
 }
 
@@ -294,8 +296,11 @@ void MainGame::drawGame() {		//Draw content to the game
 		glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 	}
 
+	//Drawing the agent
+	_cubeAgent.draw();
+
 	//Drawing a cube.
-	_cube.draw();
+	//_cube.draw();
 
 	/*//Calling the spritebatch
 	_spriteBatch.begin();

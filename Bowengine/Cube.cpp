@@ -27,6 +27,7 @@ namespace Bowengine {
 		_position = position;
 		_width = width; _height = height; _depth = depth;
 
+		//Grabbing the texture from the filepath
 		if (filePath != "") {
 			_texture = ResourceManager::getTexture(filePath);
 		}
@@ -162,7 +163,7 @@ namespace Bowengine {
 
 	void Cube::draw() {
 
-		//Bind the texture to the sprite.
+		//Bind the texture to the object.
 		glBindTexture(GL_TEXTURE_2D, _texture.id);
 
 		//Binding the buffer again - You can only have one bound at at time

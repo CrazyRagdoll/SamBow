@@ -9,6 +9,7 @@
 #include <Bowengine/GLTexture.h>
 #include <Bowengine/Sprite.h>
 #include <Bowengine/Cube.h>
+#include <Bowengine/Agent3D.h>
 #include <Bowengine/Window.h>
 #include <Bowengine/SpriteBatch.h>
 #include <Bowengine/ResourceManager.h>
@@ -56,6 +57,7 @@ private:
 	Bowengine::FpsLimiter _fpsLimiter;
 
 	Bowengine::Cube _cube;
+	Bowengine::Agent3D _cubeAgent;
 
 	std::vector<Bullet> _bullets;
 

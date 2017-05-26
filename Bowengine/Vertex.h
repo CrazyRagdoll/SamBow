@@ -89,4 +89,30 @@ namespace Bowengine {
 
 	};
 
+	//Making a struct for our simple object loader
+	struct VertexOBJ {
+
+		Position vertices, normals;
+
+		UV uv;
+
+		void setVerticies(float x, float y, float z) {
+			vertices.x = x;
+			vertices.y = y;
+			vertices.z = z;
+		}
+
+		void setUV(float u, float v) {
+			uv.u = u;
+			uv.v = v;
+		}
+		
+		void setNormals(float x, float y, float z) {
+			normals.x = x;
+			normals.y = y;
+			normals.z = z;
+		}
+
+	};
+
 }
