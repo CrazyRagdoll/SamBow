@@ -36,10 +36,13 @@ namespace Bowengine {
 			_texture.id = 0;
 		}
 
-		//These objects can be anysize so lets hold all of the data
-		VertexOBJ vertexData[36];
+		//Creating a dynamic array
+		VertexOBJ* vertexData;
+		_vertexAmount = _vertices.size();
+		vertexData = new VertexOBJ[_vertexAmount];
 
-		std::cout << _vertices.size() << " " << _uvs.size() << std::endl;
+		//Hard coded in the size of the object
+		//VertexOBJ vertexData[36];
 
 		//Filling our object data into the vertexData
 		for (int i = 0; i < _vertices.size(); i++) {
@@ -48,8 +51,8 @@ namespace Bowengine {
 			vertexData[i].setNormals(_normals[i].x, _normals[i].y, _normals[i].z);
 		}
 
-		//Declaring the size of the vertex
-		_vertexSize = sizeof(vertexData);
+		//Declaring the size of the vertex (cant use sizeof(vertexData) due to it now being a dynamic array aka a pointer
+		_vertexSize = sizeof(VertexOBJ) * _vertexAmount;
 
 		//Bind the buffer to ARRAY_BUFFER with our ID
 		glBindBuffer(GL_ARRAY_BUFFER, _vboID);
@@ -57,6 +60,8 @@ namespace Bowengine {
 		glBufferData(GL_ARRAY_BUFFER, _vertexSize, vertexData, GL_STATIC_DRAW);
 		//Unbind the buffer
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		//delete[] vertexData;
 
 	}
 

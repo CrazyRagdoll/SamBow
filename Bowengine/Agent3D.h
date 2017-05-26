@@ -24,7 +24,7 @@ namespace Bowengine {
 		//GL int garanteed to be 32bits.
 		GLuint _vboID;
 
-		int _vertexSize;
+		int _vertexSize, _vertexAmount;
 
 		std::vector<glm::vec3> _vertices, _normals;
 		std::vector<glm::vec2> _uvs;
