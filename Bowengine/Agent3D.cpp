@@ -61,6 +61,7 @@ namespace Bowengine {
 		//Unbind the buffer
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+		//Need to delete the dynamic array 
 		delete[] vertexData;
 
 	}

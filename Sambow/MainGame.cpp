@@ -50,16 +50,16 @@ void MainGame::initSystems() {
 	_fpsLimiter.init(_maxFPS);
 
 	//Load a cube
-	_cubeAgent.init("Objects/Cube.obj", "Textures/Cube.png");
+	_cubeAgent.init("Objects/Cube.obj", "");
 
 	//Create a cube
-	//_cube.init(glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, 1.0f, 1.0f, "Textures/Cube.png");
+	//_cube.init(glm::vec3(0.0f, 2.0f, 0.0f), 2.0f, 2.0f, 2.0f, "Textures/Cube.png");
 
 }
 
 void MainGame::initShaders() {
 	//Using colour program to compile, init, and link our fragment + vertex shaders
-	_colourProgram.compileShaders("Shaders/colourShading2.vert", "Shaders/colourShading2.frag");
+	_colourProgram.compileShaders("Shaders/colourShading.vs", "Shaders/colourShading.fs");
 	_colourProgram.addAttribute("vertexPosition");
 	_colourProgram.addAttribute("vertexColour");
 	_colourProgram.addAttribute("VertexUV");

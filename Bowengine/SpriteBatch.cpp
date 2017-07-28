@@ -104,11 +104,11 @@ namespace Bowengine {
 		for (int cg = 1; cg < _glyphs.size(); cg++) {
 			//Check if this glyph can be part of the current batch
 			if (_glyphs[cg]->texture != _glyphs[cg - 1]->texture) {
-				//Make a new batch
+				//Make a new batch for new texture
 				_renderBatches.emplace_back(offset, 6, _glyphs[cg]->texture);
 			}
 			else {
-				//if its part of the current batch, just increase m
+				//if its part of the current batch, just skip the 6 vertices
 				_renderBatches.back().numVertices += 6;
 			}
 			vertices[cv++] = _glyphs[cg]->topLeft;

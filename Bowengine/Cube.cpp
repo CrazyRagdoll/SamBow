@@ -51,56 +51,57 @@ namespace Bowengine {
 		glm::vec3 BackTR = glm::vec3(_position.x + _width / 2, _position.y + _height / 2, _position.z - _depth / 2);	//  1,  1, -1
 		glm::vec3 BackBR = glm::vec3(_position.x + _width / 2, _position.y - _height / 2, _position.z - _depth / 2);	//  1, -1, -1
 
+
 		//A cube is 6 faces of 2 triangles with 3 vertices each: 3*2*6 = 36
 		Vertex3D vertexData[36];
 
-		vertexData[0].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));	
-		vertexData[1].setPosXYZ(glm::vec3(-1.0f, -1.0f, 1.0f));		
-		vertexData[2].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));	
+		vertexData[0].setPosXYZ(glm::vec3(BackBL));
+		vertexData[1].setPosXYZ(glm::vec3(FrontBL));
+		vertexData[2].setPosXYZ(glm::vec3(FrontTL));
 
-		vertexData[3].setPosXYZ(glm::vec3(1.0f, 1.0f, -1.0f));
-		vertexData[4].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));
-		vertexData[5].setPosXYZ(glm::vec3(-1.0f, 1.0f, -1.0f));	
+		vertexData[3].setPosXYZ(glm::vec3(BackTR));
+		vertexData[4].setPosXYZ(glm::vec3(BackBL));
+		vertexData[5].setPosXYZ(glm::vec3(BackTL));
 
-		vertexData[6].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));	
-		vertexData[7].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));	
-		vertexData[8].setPosXYZ(glm::vec3(1.0f, -1.0f, -1.0f));
+		vertexData[6].setPosXYZ(glm::vec3(FrontBR));
+		vertexData[7].setPosXYZ(glm::vec3(BackBL));
+		vertexData[8].setPosXYZ(glm::vec3(BackBR));
 
-		vertexData[9].setPosXYZ(glm::vec3(1.0f, 1.0f, -1.0f));
-		vertexData[10].setPosXYZ(glm::vec3(1.0f, -1.0f, -1.0f));	
-		vertexData[11].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));	
+		vertexData[9].setPosXYZ(glm::vec3(BackTR));
+		vertexData[10].setPosXYZ(glm::vec3(BackBR));
+		vertexData[11].setPosXYZ(glm::vec3(BackBL));
 
-		vertexData[12].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));	
-		vertexData[13].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));		
-		vertexData[14].setPosXYZ(glm::vec3(-1.0f, 1.0f, -1.0f));	
+		vertexData[12].setPosXYZ(glm::vec3(BackBL));
+		vertexData[13].setPosXYZ(glm::vec3(FrontTL));
+		vertexData[14].setPosXYZ(glm::vec3(BackTL));
 
-		vertexData[15].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));	
-		vertexData[16].setPosXYZ(glm::vec3(-1.0f, -1.0f, 1.0f));	
-		vertexData[17].setPosXYZ(glm::vec3(-1.0f, -1.0f, -1.0f));
+		vertexData[15].setPosXYZ(glm::vec3(FrontBR));
+		vertexData[16].setPosXYZ(glm::vec3(FrontBL));
+		vertexData[17].setPosXYZ(glm::vec3(BackBL));
 
-		vertexData[18].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));	
-		vertexData[19].setPosXYZ(glm::vec3(-1.0f, -1.0f, 1.0f));	
-		vertexData[20].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));	
+		vertexData[18].setPosXYZ(glm::vec3(FrontTL));
+		vertexData[19].setPosXYZ(glm::vec3(FrontBL));
+		vertexData[20].setPosXYZ(glm::vec3(FrontBR));
 
-		vertexData[21].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
-		vertexData[22].setPosXYZ(glm::vec3(1.0f, -1.0f, -1.0f));
-		vertexData[23].setPosXYZ(glm::vec3(1.0f, 1.0f, -1.0f));	
+		vertexData[21].setPosXYZ(glm::vec3(FrontTR));
+		vertexData[22].setPosXYZ(glm::vec3(BackBR));
+		vertexData[23].setPosXYZ(glm::vec3(BackTR));
 
-		vertexData[24].setPosXYZ(glm::vec3(1.0f, -1.0f, -1.0f));	
-		vertexData[25].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
-		vertexData[26].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));		
+		vertexData[24].setPosXYZ(glm::vec3(BackBR));
+		vertexData[25].setPosXYZ(glm::vec3(FrontTR));
+		vertexData[26].setPosXYZ(glm::vec3(FrontBR));
 
-		vertexData[27].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
-		vertexData[28].setPosXYZ(glm::vec3(1.0f, 1.0f, -1.0f));		
-		vertexData[29].setPosXYZ(glm::vec3(-1.0f, 1.0f, -1.0f));	
+		vertexData[27].setPosXYZ(glm::vec3(FrontTR));
+		vertexData[28].setPosXYZ(glm::vec3(BackTR));
+		vertexData[29].setPosXYZ(glm::vec3(BackTL));
 
-		vertexData[30].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
-		vertexData[31].setPosXYZ(glm::vec3(-1.0f, 1.0f, -1.0f));
-		vertexData[32].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));	
+		vertexData[30].setPosXYZ(glm::vec3(FrontTR));
+		vertexData[31].setPosXYZ(glm::vec3(BackTL));
+		vertexData[32].setPosXYZ(glm::vec3(FrontTL));
 
-		vertexData[33].setPosXYZ(glm::vec3(1.0f, 1.0f, 1.0f));	
-		vertexData[34].setPosXYZ(glm::vec3(-1.0f, 1.0f, 1.0f));	
-		vertexData[35].setPosXYZ(glm::vec3(1.0f, -1.0f, 1.0f));	
+		vertexData[33].setPosXYZ(glm::vec3(FrontTR));
+		vertexData[34].setPosXYZ(glm::vec3(FrontTL));
+		vertexData[35].setPosXYZ(glm::vec3(FrontBR));
 
 		for (int i = 0; i < 36; i++)
 		{
