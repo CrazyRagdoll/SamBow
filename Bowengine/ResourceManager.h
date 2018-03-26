@@ -19,7 +19,6 @@ namespace Bowengine {
 		static ImageLoader _imageLoader;
 		static ObjectLoader _objectLoader;
 
-
 	};
 
 }

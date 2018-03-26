@@ -92,9 +92,11 @@ namespace Bowengine {
 	//Making a struct for our simple object loader
 	struct VertexOBJ {
 
-		Position vertices, normals;
-
+		glm::vec3 vertices;
+		glm::vec3 normals;
 		UV uv;
+		glm::vec3 tangents;
+		glm::vec3 biTangents;
 
 		void setVerticies(float x, float y, float z) {
 			vertices.x = x;
@@ -113,6 +115,25 @@ namespace Bowengine {
 			normals.z = z;
 		}
 
+		void setTangents(float x, float y, float z) {
+			tangents.x = x;
+			tangents.y = y;
+			tangents.z = z;
+		}
+
+		void setBiTangents(float x, float y, float z) {
+			biTangents.x = x;
+			biTangents.y = y;
+			biTangents.z = z;
+		}
+
+	};
+
+	//Making a texture struct to hold an id and texture type
+	struct Texture {
+		unsigned int id;
+		std::string type;
+		std::string path;
 	};
 
 }
